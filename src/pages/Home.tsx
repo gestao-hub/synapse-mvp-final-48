@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InteractiveTextAnimation from '@/components/InteractiveTextAnimation';
-import ProductFlowAnimation from '@/components/ProductFlowAnimation';
+
 import ChatAssistant from '@/components/ChatAssistant';
 import AuroraBackground from '@/components/landing/AuroraBackground';
 
@@ -422,8 +422,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Insert ProductFlowAnimation */}
-      <ProductFlowAnimation />
 
       {/* Metodologias de Ensino e RH */}
       <section className="py-32 bg-white/5">
