@@ -12,7 +12,7 @@ export function PublicLayout() {
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Logo excluv.ia corporate - exact styling */}
           <div className="flex items-center">
-            <img src="/lovable-uploads/82c16bce-21ab-4d7f-96b0-94d72a867a2e.png" alt="Excluv.ia Corporate" className="h-8 sm:h-10" />
+            <img src="/lovable-uploads/82c16bce-21ab-4d7f-96b0-94d72a867a2e.png" alt="Excluv.ia Corporate" className="h-48" />
           </div>
 
           {/* Central Navigation - centered */}
