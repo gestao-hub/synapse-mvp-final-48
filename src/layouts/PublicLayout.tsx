@@ -6,14 +6,14 @@ export function PublicLayout() {
   return <div className="min-h-screen bg-midnight text-white">
       {/* Header - exact replication from reference */}
       <header className="border-b border-white/10 bg-[#1a1b3e]/95 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="container mx-auto px-6 h-16 flex items-center">
           {/* Logo excluv.ia corporate - exact styling */}
           <div className="flex items-center">
             <img src="/lovable-uploads/82c16bce-21ab-4d7f-96b0-94d72a867a2e.png" alt="Excluv.ia Corporate" className="h-48" />
           </div>
 
-          {/* Central Navigation - exact positioning */}
-          <nav className="hidden md:flex items-center space-x-8 font-cal">
+          {/* Central Navigation - centered */}
+          <nav className="hidden md:flex items-center space-x-8 font-cal flex-1 justify-center">
             <Link to="/" className="text-sm text-spring hover:text-spring/80 transition-colors">
               Home
             </Link>
@@ -84,8 +84,6 @@ export function PublicLayout() {
               Contato
             </Link>
           </nav>
-
-          {/* Login button removed */}
         </div>
       </header>
 
