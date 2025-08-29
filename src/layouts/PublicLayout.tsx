@@ -85,10 +85,7 @@ export function PublicLayout() {
             </Link>
           </nav>
 
-          {/* Login Button - exact styling from reference */}
-          <Link to="/login" className="bg-transparent border border-white/20 text-white px-4 py-2 rounded-md text-sm font-cal hover:bg-white/10 transition-all duration-200">
-            Login
-          </Link>
+          {/* Login button removed */}
         </div>
       </header>
 

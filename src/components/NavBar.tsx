@@ -67,9 +67,7 @@ export default function NavBar() {
               </Button>
             </div>
           ) : (
-            <Link to="/login" className="rounded-xl px-4 py-2 bg-white/10 hover:bg-white/20 transition">
-              Entrar
-            </Link>
+            null
           )}
         </div>
       </div>
