@@ -81,6 +81,20 @@ export default function Home() {
             A Excluv.ia Corporate desenvolve soluções de IA conversacional para transformar treinamentos, atendimento e processos empresariais com tecnologia de ponta.
           </p>
 
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
+            <Link to="/contato">
+              <Button className="bg-gradient-to-r from-purple to-spring hover:from-purple/80 hover:to-spring/80 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 w-full sm:w-auto">
+                Agendar Demonstração
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-xl w-full sm:w-auto">
+                Fazer Login
+              </Button>
+            </Link>
+          </div>
+
         </div>
       </section>
 
