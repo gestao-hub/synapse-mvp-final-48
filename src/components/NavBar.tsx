@@ -65,34 +65,36 @@ export default function NavBar() {
             )}
           </button>
 
-          {isAuthenticated && profile ? (
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-white/80 hidden lg:block">{profile.display_name || profile.email}</span>
-                <Badge variant="outline" className="text-xs capitalize">
-                  {profile.role}
-                </Badge>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => signOut()}
-                className="text-white/80 border-white/20 hover:bg-white/10"
-              >
-                Sair
-              </Button>
-            </div>
-          ) : (
-            <Link to="/login">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-white/80 border-white/20 hover:bg-white/10"
-              >
-                Login
-              </Button>
-            </Link>
-          )}
+          <div className="hidden sm:flex items-center gap-3">
+            {isAuthenticated && profile ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-white/80 hidden lg:block">{profile.display_name || profile.email}</span>
+                  <Badge variant="outline" className="text-xs capitalize">
+                    {profile.role}
+                  </Badge>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => signOut()}
+                  className="text-white/80 border-white/20 hover:bg-white/10"
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link to="/login">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-white/80 border-white/20 hover:bg-white/10"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
@@ -114,25 +116,25 @@ export default function NavBar() {
             ))}
             
             {/* Mobile Auth Section */}
-            {isAuthenticated && profile ? (
-              <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
-                <div className="px-4 py-2 text-sm text-white/80">
-                  {profile.display_name || profile.email}
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => {
-                    signOut();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-white/80 border-white/20 hover:bg-white/10"
-                >
-                  Sair
-                </Button>
-              </div>
-            ) : (
-              <div className="border-t border-white/10 pt-4 mt-4">
+            <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
+              {isAuthenticated && profile ? (
+                <>
+                  <div className="px-4 py-2 text-sm text-white/80">
+                    {profile.display_name || profile.email}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      signOut();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full text-white/80 border-white/20 hover:bg-white/10"
+                  >
+                    Sair
+                  </Button>
+                </>
+              ) : (
                 <Link to="/login">
                   <Button 
                     variant="outline" 
@@ -143,8 +145,8 @@ export default function NavBar() {
                     Login
                   </Button>
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </nav>
         </div>
       )}
