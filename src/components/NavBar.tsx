@@ -114,7 +114,7 @@ export default function NavBar() {
             ))}
             
             {/* Mobile Auth Section */}
-            {isAuthenticated && profile && (
+            {isAuthenticated && profile ? (
               <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
                 <div className="px-4 py-2 text-sm text-white/80">
                   {profile.display_name || profile.email}
