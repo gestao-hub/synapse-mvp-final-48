@@ -485,99 +485,186 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Produto Synapse com Enhanced Hover Effects */}
-      <section className="py-32 bg-midnight">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Nossos Produtos
-            </h2>
-            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto">
-              Conheça o Synapse, nossa plataforma revolucionária de treinamento com IA
-            </p>
-          </div>
+      {/* Seção Synapse - Design da imagem de referência */}
+      <section style={{ 
+        padding: 'clamp(40px, 10vw, 80px) 0', 
+        backgroundColor: '#000131',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          padding: '0 20px'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(13, 20, 42, 0.8) 0%, rgba(20, 25, 55, 0.9) 100%)',
+            border: '1px solid rgba(134, 1, 248, 0.2)',
+            borderRadius: '24px',
+            padding: 'clamp(32px, 8vw, 64px)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 'clamp(32px, 8vw, 64px)',
+            alignItems: 'center',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 25px 50px rgba(134, 1, 248, 0.1)'
+          }}>
+            
+            {/* Lado esquerdo - Conteúdo principal */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 4vw, 32px)' }}>
+              
+              {/* Título Synapse */}
+              <h1 style={{
+                fontSize: 'clamp(2rem, 8vw, 4rem)',
+                fontWeight: 'bold',
+                background: 'linear-gradient(90deg, #8601F8 0%, #d946ef 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontFamily: 'Cal Sans, Inter, sans-serif',
+                margin: '0',
+                lineHeight: '1.1'
+              }}>
+                Synapse
+              </h1>
 
-          <div className="mx-auto max-w-4xl">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-8 shadow-2xl ring-1 ring-white/20">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                <div>
-                  {/* Enhanced Synapse Logo with complex hover effects */}
-                  <div className="group relative mb-8">
-                    <div className="relative transition-all duration-500 group-hover:scale-105 group-hover:rotate-2">
-                      {/* Logo glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple/30 to-spring/30 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      
-                      {/* Main logo */}
-                      <h3 className="relative text-3xl font-bold bg-gradient-to-r from-purple to-spring bg-clip-text text-transparent filter group-hover:brightness-110 group-hover:saturate-150 transition-all duration-500">
-                        Synapse
-                      </h3>
+              {/* Descrição */}
+              <p style={{
+                fontSize: 'clamp(16px, 4vw, 20px)',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontFamily: 'Cal Sans, Inter, sans-serif',
+                lineHeight: '1.6',
+                margin: '0'
+              }}>
+                Plataforma de treinamento empresarial com IA conversacional, métricas avançadas e 
+                simulações por voz. Transforme a capacitação da sua equipe.
+              </p>
 
-                      {/* Floating particles around logo on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        {Array.from({ length: 8 }).map((_, i) => (
-                          <div
-                            key={i}
-                            className="absolute w-1 h-1 bg-purple/50 rounded-full animate-ping"
-                            style={{
-                              left: `${20 + (i * 10)}%`,
-                              top: `${20 + (i % 3) * 20}%`,
-                              animationDelay: `${i * 0.2}s`,
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      {/* Rotating rings */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-purple/20 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border border-spring/15 rounded-full animate-spin" style={{ animationDuration: '12s', animationDirection: 'reverse' }} />
-                      </div>
-
-                      {/* Drop shadow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple to-spring bg-clip-text text-transparent blur-sm opacity-0 group-hover:opacity-30 transition-opacity duration-500 text-3xl font-bold">
-                        Synapse
-                      </div>
-                    </div>
-                  </div>
-
-                  <p className="text-xl text-white/80 mb-8 leading-relaxed">
-                    Plataforma de treinamento empresarial com IA conversacional, métricas avançadas 
-                    e simulações por voz. Transforme a capacitação da sua equipe.
-                  </p>
-
-                  <ul className="space-y-4 mb-8">
-                    <li className="flex items-center text-white/70">
-                      <ArrowRight className="mr-3 h-5 w-5 text-purple" />
-                      Simulações práticas com IA
-                    </li>
-                    <li className="flex items-center text-white/70">
-                      <ArrowRight className="mr-3 h-5 w-5 text-purple" />
-                      Feedback instantâneo personalizado
-                    </li>
-                    <li className="flex items-center text-white/70">
-                      <ArrowRight className="mr-3 h-5 w-5 text-purple" />
-                      Métricas detalhadas de performance
-                    </li>
-                  </ul>
-
-                  <div>
-                    <Link to="/synapse">
-                      <Button className="group bg-gradient-to-r from-midnight-blue to-electric-purple hover:from-electric-purple hover:to-midnight-blue text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-xl">
-                        Saiba Mais
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </Button>
-                    </Link>
-                  </div>
+              {/* Lista de funcionalidades */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    flexShrink: 0
+                  }} />
+                  <span style={{
+                    fontSize: 'clamp(14px, 3.5vw, 18px)',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    fontFamily: 'Cal Sans, Inter, sans-serif'
+                  }}>
+                    Simulações práticas com IA
+                  </span>
                 </div>
-
-                <div className="flex items-center justify-center">
-                  <div className="h-64 w-full rounded-lg bg-gradient-to-br from-purple/20 to-spring/20 flex items-center justify-center">
-                    <div className="text-center">
-                      <Brain className="mx-auto h-16 w-16 text-purple mb-4" />
-                      <p className="text-sm text-white/70">Dashboard Synapse</p>
-                    </div>
-                  </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    flexShrink: 0
+                  }} />
+                  <span style={{
+                    fontSize: 'clamp(14px, 3.5vw, 18px)',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    fontFamily: 'Cal Sans, Inter, sans-serif'
+                  }}>
+                    Feedback instantâneo personalizado
+                  </span>
                 </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    flexShrink: 0
+                  }} />
+                  <span style={{
+                    fontSize: 'clamp(14px, 3.5vw, 18px)',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    fontFamily: 'Cal Sans, Inter, sans-serif'
+                  }}>
+                    Métricas detalhadas de performance
+                  </span>
+                </div>
+              </div>
+
+              {/* Botão Saiba Mais */}
+              <div style={{ marginTop: '16px' }}>
+                <Link 
+                  to="/dashboard" 
+                  style={{ 
+                    display: 'inline-block',
+                    padding: 'clamp(12px, 3vw, 16px) clamp(24px, 6vw, 32px)',
+                    borderRadius: '16px',
+                    background: 'linear-gradient(90deg, #8601F8 0%, #d946ef 100%)',
+                    color: '#FFFFFF',
+                    textDecoration: 'none',
+                    fontSize: 'clamp(14px, 3.5vw, 16px)',
+                    fontWeight: '600',
+                    fontFamily: 'Cal Sans, Inter, sans-serif',
+                    boxShadow: '0 10px 30px rgba(134, 1, 248, 0.3)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 15px 35px rgba(134, 1, 248, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(134, 1, 248, 0.3)';
+                  }}
+                >
+                  Saiba Mais →
+                </Link>
+              </div>
+            </div>
+
+            {/* Lado direito - Dashboard Preview */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{
+                width: '100%',
+                minHeight: '300px',
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 50%, rgba(0, 255, 153, 0.05) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '16px',
+                padding: '32px',
+                backdropFilter: 'blur(5px)'
+              }}>
+                {/* Ícone do cérebro com gradiente */}
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '32px',
+                  animation: 'pulse 2s ease-in-out infinite'
+                }}>
+                  🧠
+                </div>
+                
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  textAlign: 'center',
+                  margin: '0'
+                }}>
+                  Dashboard Synapse
+                </p>
               </div>
             </div>
           </div>
