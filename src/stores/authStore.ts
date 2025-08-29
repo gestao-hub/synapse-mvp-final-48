@@ -89,6 +89,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       initialize: async () => {
+        console.log('AuthStore - Initialize called');
         set({ isLoading: true });
 
         try {
@@ -102,6 +103,7 @@ export const useAuthStore = create<AuthState>()(
           }
 
           if (session) {
+            console.log('AuthStore - Found existing session, user authenticated');
             set({
               session,
               user: session.user,
@@ -110,6 +112,13 @@ export const useAuthStore = create<AuthState>()(
 
             // Load user profile
             await get().loadProfile();
+          } else {
+            console.log('AuthStore - No existing session, user not authenticated');
+            set({
+              session: null,
+              user: null,
+              isAuthenticated: false
+            });
           }
 
           // Listen for auth changes
@@ -133,6 +142,7 @@ export const useAuthStore = create<AuthState>()(
           console.error('Error initializing auth:', error);
         } finally {
           set({ isLoading: false });
+          console.log('AuthStore - Initialize complete, final state:', get());
         }
       }
     }),

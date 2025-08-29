@@ -24,6 +24,11 @@ export default function NavBar() {
   const { profile, isAuthenticated, signOut } = useAuthStore()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
+  // Debug logs to identify the issue
+  console.log('NavBar - isAuthenticated:', isAuthenticated)
+  console.log('NavBar - profile:', profile)
+  console.log('NavBar - Should show login button:', !isAuthenticated)
+  
   // Filter links based on user role
   const visibleLinks = allLinks.filter(link => 
     !profile?.role || link.roles.includes(profile.role)
