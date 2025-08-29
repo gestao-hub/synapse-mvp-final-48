@@ -1088,7 +1088,7 @@ export default function Home() {
               Experimente todas essas funcionalidades e transforme o treinamento da sua equipe com IA conversacional
             </p>
             <Link 
-              to="/dashboard" 
+              to="/contato" 
               style={{ 
                 display: 'inline-block',
                 padding: 'clamp(16px, 4vw, 20px) clamp(32px, 8vw, 48px)',
@@ -1111,7 +1111,7 @@ export default function Home() {
                 e.currentTarget.style.boxShadow = '0 20px 40px rgba(134, 1, 248, 0.4)';
               }}
             >
-              Acessar Plataforma →
+              Agendar Demonstração →
             </Link>
           </div>
 
