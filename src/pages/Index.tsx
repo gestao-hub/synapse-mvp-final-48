@@ -188,6 +188,233 @@ const Index = () => {
         
         <ExcluviaCircuitAnimation />
       </section>
+
+      {/* SEÇÃO DASHBOARD PREVIEW */}
+      <section style={{ padding: 'clamp(40px, 10vw, 80px) 0', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(24px, 6vw, 48px)' }}>
+          <h2 
+            style={{ 
+              fontSize: 'clamp(1.5rem, 5vw, 3rem)',
+              fontWeight: 'bold',
+              marginBottom: '16px',
+              background: 'linear-gradient(90deg, #8601F8 0%, #00FF99 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontFamily: 'Cal Sans, Inter, sans-serif',
+              margin: '0 0 16px 0'
+            }}
+          >
+            Conheça o Dashboard
+          </h2>
+          <p 
+            style={{ 
+              fontSize: 'clamp(14px, 3.5vw, 18px)',
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontFamily: 'Cal Sans, Inter, sans-serif',
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: '1.6',
+              padding: '0 20px'
+            }}
+          >
+            Veja como funciona a interface onde você acompanha seu progresso, 
+            métricas detalhadas e histórico de simulações.
+          </p>
+        </div>
+        
+        {/* Grid de funcionalidades com imagens mockup */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gap: 'clamp(20px, 5vw, 40px)', 
+          padding: '0 20px' 
+        }}>
+          
+          {/* Card 1 - Analytics */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(0, 255, 153, 0.05) 100%)',
+            border: '1px solid rgba(134, 1, 248, 0.2)',
+            borderRadius: '16px',
+            padding: '24px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '100%',
+              height: '200px',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <div style={{
+                background: 'linear-gradient(45deg, #8601F8, #00FF99)',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>
+                📊
+              </div>
+            </div>
+            <h3 style={{ 
+              fontSize: '18px', 
+              fontWeight: '600', 
+              color: '#FFFFFF', 
+              marginBottom: '8px',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Métricas Avançadas
+            </h3>
+            <p style={{ 
+              fontSize: '14px', 
+              color: 'rgba(255, 255, 255, 0.7)', 
+              lineHeight: '1.4',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Acompanhe seu desempenho com gráficos detalhados e análises em tempo real
+            </p>
+          </div>
+
+          {/* Card 2 - Sessions */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(0, 255, 153, 0.05) 100%)',
+            border: '1px solid rgba(134, 1, 248, 0.2)',
+            borderRadius: '16px',
+            padding: '24px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '100%',
+              height: '200px',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <div style={{
+                background: 'linear-gradient(45deg, #00FF99, #8601F8)',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>
+                🎯
+              </div>
+            </div>
+            <h3 style={{ 
+              fontSize: '18px', 
+              fontWeight: '600', 
+              color: '#FFFFFF', 
+              marginBottom: '8px',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Histórico de Sessões
+            </h3>
+            <p style={{ 
+              fontSize: '14px', 
+              color: 'rgba(255, 255, 255, 0.7)', 
+              lineHeight: '1.4',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Revise todas suas simulações com feedback detalhado e pontuações
+            </p>
+          </div>
+
+          {/* Card 3 - Reports */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(0, 255, 153, 0.05) 100%)',
+            border: '1px solid rgba(134, 1, 248, 0.2)',
+            borderRadius: '16px',
+            padding: '24px',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '100%',
+              height: '200px',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <div style={{
+                background: 'linear-gradient(45deg, #8601F8, #00FF99)',
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>
+                📈
+              </div>
+            </div>
+            <h3 style={{ 
+              fontSize: '18px', 
+              fontWeight: '600', 
+              color: '#FFFFFF', 
+              marginBottom: '8px',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Relatórios Personalizados
+            </h3>
+            <p style={{ 
+              fontSize: '14px', 
+              color: 'rgba(255, 255, 255, 0.7)', 
+              lineHeight: '1.4',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Exporte relatórios em PDF com análises completas do seu progresso
+            </p>
+          </div>
+        </div>
+
+        {/* Call to action para o dashboard */}
+        <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 8vw, 64px)' }}>
+          <Link 
+            to="/dashboard" 
+            style={{ 
+              display: 'inline-block',
+              padding: 'clamp(14px, 3.5vw, 18px) clamp(28px, 7vw, 40px)',
+              borderRadius: '16px',
+              background: 'linear-gradient(90deg, #8601F8 0%, #00FF99 100%)',
+              color: '#FFFFFF',
+              textDecoration: 'none',
+              fontSize: 'clamp(16px, 3.5vw, 18px)',
+              fontWeight: '600',
+              fontFamily: 'Cal Sans, Inter, sans-serif',
+              boxShadow: '0 15px 35px rgba(134, 1, 248, 0.4)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(134, 1, 248, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 15px 35px rgba(134, 1, 248, 0.4)';
+            }}
+          >
+            Explore o Dashboard Agora
+          </Link>
+        </div>
+      </section>
     </div>
   )
 }
