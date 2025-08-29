@@ -1,6 +1,10 @@
 import { Play } from 'lucide-react';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 export default function ProductFlowAnimation() {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+
   return (
     <section className="relative py-32 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f0f23] overflow-hidden">
       {/* Background animated elements */}
@@ -33,19 +37,38 @@ export default function ProductFlowAnimation() {
         </p>
 
         {/* Central Play Button */}
-        <div className="relative group cursor-pointer">
-          {/* Ripple effects */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple/20 to-spring/20 animate-ping" />
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple/10 to-spring/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
-          
-          {/* Main button */}
-          <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full bg-gradient-to-r from-purple to-spring flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-2xl">
-            <Play className="w-8 h-8 md:w-12 md:h-12 text-white ml-1 group-hover:scale-125 transition-transform duration-300" fill="currentColor" />
-          </div>
+        <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+          <DialogTrigger asChild>
+            <div className="relative group cursor-pointer">
+              {/* Ripple effects */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple/20 to-spring/20 animate-ping" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple/10 to-spring/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
+              
+              {/* Main button */}
+              <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full bg-gradient-to-r from-purple to-spring flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-2xl">
+                <Play className="w-8 h-8 md:w-12 md:h-12 text-white ml-1 group-hover:scale-125 transition-transform duration-300" fill="currentColor" />
+              </div>
 
-          {/* Glow effect */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple to-spring opacity-30 blur-xl group-hover:opacity-50 transition-opacity duration-300" />
-        </div>
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple to-spring opacity-30 blur-xl group-hover:opacity-50 transition-opacity duration-300" />
+            </div>
+          </DialogTrigger>
+          
+          <DialogContent className="max-w-4xl w-[90vw] p-0 bg-background/95 backdrop-blur-sm border-border/50">
+            <div className="aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="Como Potencializamos Sua Equipe - Demonstração"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-lg"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Flow steps indicators */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
