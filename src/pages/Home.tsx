@@ -485,189 +485,636 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Seção Synapse - Design da imagem de referência */}
+      {/* TUTORIAL COMPLETO DA PLATAFORMA */}
       <section style={{ 
-        padding: 'clamp(40px, 10vw, 80px) 0', 
+        padding: 'clamp(60px, 15vw, 120px) 0', 
         backgroundColor: '#000131',
-        position: 'relative',
-        overflow: 'hidden'
+        position: 'relative'
       }}>
-        <div style={{ 
-          maxWidth: '1200px', 
-          margin: '0 auto', 
-          padding: '0 20px'
-        }}>
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(13, 20, 42, 0.8) 0%, rgba(20, 25, 55, 0.9) 100%)',
-            border: '1px solid rgba(134, 1, 248, 0.2)',
-            borderRadius: '24px',
-            padding: 'clamp(32px, 8vw, 64px)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 'clamp(32px, 8vw, 64px)',
-            alignItems: 'center',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 25px 50px rgba(134, 1, 248, 0.1)'
-          }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px' }}>
+          
+          {/* Título da seção */}
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 12vw, 96px)' }}>
+            <h2 style={{
+              fontSize: 'clamp(2rem, 6vw, 4rem)',
+              fontWeight: 'bold',
+              background: 'linear-gradient(90deg, #8601F8 0%, #00FF99 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontFamily: 'Cal Sans, Inter, sans-serif',
+              margin: '0 0 24px 0'
+            }}>
+              Como Funciona a Plataforma
+            </h2>
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 20px)',
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontFamily: 'Cal Sans, Inter, sans-serif',
+              maxWidth: '800px',
+              margin: '0 auto',
+              lineHeight: '1.6'
+            }}>
+              Conheça cada funcionalidade do Synapse através deste guia visual completo
+            </p>
+          </div>
+
+          {/* Tutorial Steps */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(60px, 15vw, 100px)' }}>
             
-            {/* Lado esquerdo - Conteúdo principal */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 4vw, 32px)' }}>
-              
-              {/* Título Synapse */}
-              <h1 style={{
-                fontSize: 'clamp(2rem, 8vw, 4rem)',
-                fontWeight: 'bold',
-                background: 'linear-gradient(90deg, #8601F8 0%, #d946ef 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontFamily: 'Cal Sans, Inter, sans-serif',
-                margin: '0',
-                lineHeight: '1.1'
-              }}>
-                Synapse
-              </h1>
-
-              {/* Descrição */}
-              <p style={{
-                fontSize: 'clamp(16px, 4vw, 20px)',
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontFamily: 'Cal Sans, Inter, sans-serif',
-                lineHeight: '1.6',
-                margin: '0'
-              }}>
-                Plataforma de treinamento empresarial com IA conversacional, métricas avançadas e 
-                simulações por voz. Transforme a capacitação da sua equipe.
-              </p>
-
-              {/* Lista de funcionalidades */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    flexShrink: 0
-                  }} />
-                  <span style={{
-                    fontSize: 'clamp(14px, 3.5vw, 18px)',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    fontFamily: 'Cal Sans, Inter, sans-serif'
-                  }}>
-                    Simulações práticas com IA
-                  </span>
-                </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    flexShrink: 0
-                  }} />
-                  <span style={{
-                    fontSize: 'clamp(14px, 3.5vw, 18px)',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    fontFamily: 'Cal Sans, Inter, sans-serif'
-                  }}>
-                    Feedback instantâneo personalizado
-                  </span>
-                </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    background: 'linear-gradient(45deg, #8601F8, #d946ef)',
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    flexShrink: 0
-                  }} />
-                  <span style={{
-                    fontSize: 'clamp(14px, 3.5vw, 18px)',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    fontFamily: 'Cal Sans, Inter, sans-serif'
-                  }}>
-                    Métricas detalhadas de performance
-                  </span>
-                </div>
-              </div>
-
-              {/* Botão Saiba Mais */}
-              <div style={{ marginTop: '16px' }}>
-                <Link 
-                  to="/dashboard" 
-                  style={{ 
-                    display: 'inline-block',
-                    padding: 'clamp(12px, 3vw, 16px) clamp(24px, 6vw, 32px)',
-                    borderRadius: '16px',
-                    background: 'linear-gradient(90deg, #8601F8 0%, #d946ef 100%)',
-                    color: '#FFFFFF',
-                    textDecoration: 'none',
-                    fontSize: 'clamp(14px, 3.5vw, 16px)',
-                    fontWeight: '600',
-                    fontFamily: 'Cal Sans, Inter, sans-serif',
-                    boxShadow: '0 10px 30px rgba(134, 1, 248, 0.3)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 15px 35px rgba(134, 1, 248, 0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(134, 1, 248, 0.3)';
-                  }}
-                >
-                  Saiba Mais →
-                </Link>
-              </div>
-            </div>
-
-            {/* Lado direito - Dashboard Preview */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <div style={{
-                width: '100%',
-                minHeight: '300px',
-                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 50%, rgba(0, 255, 153, 0.05) 100%)',
-                border: '1px solid rgba(134, 1, 248, 0.2)',
-                borderRadius: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '16px',
-                padding: '32px',
-                backdropFilter: 'blur(5px)'
-              }}>
-                {/* Ícone do cérebro com gradiente */}
+            {/* Step 1 - Dashboard Principal */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div>
                 <div style={{
-                  width: '80px',
-                  height: '80px',
                   background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '32px',
-                  animation: 'pulse 2s ease-in-out infinite'
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
                 }}>
-                  🧠
+                  01
                 </div>
-                
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Dashboard Principal
+                </h3>
                 <p style={{
                   fontSize: 'clamp(14px, 3.5vw, 18px)',
-                  color: 'rgba(255, 255, 255, 0.7)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
                   fontFamily: 'Cal Sans, Inter, sans-serif',
-                  textAlign: 'center',
-                  margin: '0'
+                  marginBottom: '24px'
                 }}>
-                  Dashboard Synapse
+                  Acompanhe sua evolução com métricas em tempo real: total de sessões, duração das práticas, 
+                  trilhas ativas e gráficos de performance. O sistema inclui um tour guiado para novos usuários.
                 </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: '0', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px' 
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>KPIs de performance</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Gráficos de tendência</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Tour interativo</span>
+                  </li>
+                </ul>
+              </div>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/612e013c-7325-4f24-8a5f-da8da49d3d34.png" 
+                  alt="Dashboard Principal"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
               </div>
             </div>
+
+            {/* Step 2 - Análise de Performance */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/3e308eb1-4c99-4836-9bac-61167506235c.png" 
+                  alt="Análise de Performance"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+              <div>
+                <div style={{
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  02
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Análise de Performance
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  marginBottom: '24px'
+                }}>
+                  Compare seu desempenho com benchmarks da indústria. Veja sua posição no percentil, 
+                  identifique pontos fortes e áreas para melhoria com métricas detalhadas.
+                </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: '0', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px' 
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Benchmarks da indústria</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Posição no percentil</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Recomendações personalizadas</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Step 3 - Cenários por Área */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div>
+                <div style={{
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  03
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Cenários Especializados
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  marginBottom: '24px'
+                }}>
+                  Pratique com cenários específicos para cada área: Comercial, RH, Educacional e Gestão. 
+                  Cada simulação possui níveis de dificuldade e critérios de avaliação únicos.
+                </p>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+                  gap: '12px',
+                  marginTop: '24px'
+                }}>
+                  <div style={{
+                    background: 'rgba(134, 1, 248, 0.1)',
+                    border: '1px solid rgba(134, 1, 248, 0.3)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    color: '#FFFFFF'
+                  }}>
+                    Comercial
+                  </div>
+                  <div style={{
+                    background: 'rgba(0, 255, 153, 0.1)',
+                    border: '1px solid rgba(0, 255, 153, 0.3)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    color: '#FFFFFF'
+                  }}>
+                    RH
+                  </div>
+                  <div style={{
+                    background: 'rgba(212, 70, 239, 0.1)',
+                    border: '1px solid rgba(212, 70, 239, 0.3)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    color: '#FFFFFF'
+                  }}>
+                    Educacional
+                  </div>
+                  <div style={{
+                    background: 'rgba(46, 208, 255, 0.1)',
+                    border: '1px solid rgba(46, 208, 255, 0.3)',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    textAlign: 'center',
+                    fontSize: '12px',
+                    color: '#FFFFFF'
+                  }}>
+                    Gestão
+                  </div>
+                </div>
+              </div>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/8a2f712b-e8aa-4a91-801f-d74b7abd3440.png" 
+                  alt="Cenários Comerciais"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Step 4 - Simulação em Tempo Real */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/1571c1f9-11dd-41e8-b238-504594c32b5c.png" 
+                  alt="Simulação em Tempo Real"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+              <div>
+                <div style={{
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  04
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Simulação Interativa
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  marginBottom: '24px'
+                }}>
+                  Interface imersiva com IA conversacional em tempo real. Visualize a interação através de orbs 
+                  dinâmicos que respondem à sua voz e receba feedback instantâneo durante a prática.
+                </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: '0', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px' 
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>IA conversacional avançada</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Visualização em tempo real</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Feedback instantâneo</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Step 5 - Análise Detalhada */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div>
+                <div style={{
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  05
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Relatórios Detalhados
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  marginBottom: '24px'
+                }}>
+                  Após cada simulação, receba análises completas com score por critério, análise da conversa, 
+                  indicadores de qualidade e recomendações específicas para melhoria.
+                </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: '0', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px' 
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Avaliação por critérios</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Análise conversacional</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Próximos passos</span>
+                  </li>
+                </ul>
+              </div>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/cfea5e97-5961-42b4-bc33-fa02002e06f0.png" 
+                  alt="Análise Detalhada"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Step 6 - Upload RAG */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'clamp(32px, 8vw, 64px)',
+              alignItems: 'center'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.1) 100%)',
+                border: '1px solid rgba(134, 1, 248, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <img 
+                  src="/lovable-uploads/eabe0726-ca65-4889-9aeb-518beff1bd7d.png" 
+                  alt="Upload RAG"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    maxHeight: '300px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
+              <div>
+                <div style={{
+                  background: 'linear-gradient(45deg, #8601F8, #d946ef)',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white'
+                }}>
+                  06
+                </div>
+                <h3 style={{
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                  fontWeight: 'bold',
+                  color: '#FFFFFF',
+                  marginBottom: '16px',
+                  fontFamily: 'Cal Sans, Inter, sans-serif'
+                }}>
+                  Upload de Documentos RAG
+                </h3>
+                <p style={{
+                  fontSize: 'clamp(14px, 3.5vw, 18px)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  lineHeight: '1.6',
+                  fontFamily: 'Cal Sans, Inter, sans-serif',
+                  marginBottom: '24px'
+                }}>
+                  Personalize suas simulações com documentos próprios. A IA utilizará o conteúdo como contexto 
+                  adicional, criando cenários mais precisos e relevantes para sua realidade empresarial.
+                </p>
+                <ul style={{ 
+                  listStyle: 'none', 
+                  padding: '0', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px' 
+                }}>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Suporte TXT, PDF, DOCX</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Contexto personalizado</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00FF99' }} />
+                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>Até 10MB por arquivo</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
           </div>
+
+          {/* Call to Action Final */}
+          <div style={{ 
+            textAlign: 'center', 
+            marginTop: 'clamp(80px, 20vw, 120px)',
+            padding: 'clamp(40px, 10vw, 60px)',
+            background: 'linear-gradient(135deg, rgba(134, 1, 248, 0.1) 0%, rgba(212, 70, 239, 0.05) 100%)',
+            border: '1px solid rgba(134, 1, 248, 0.2)',
+            borderRadius: '24px'
+          }}>
+            <h3 style={{
+              fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+              fontWeight: 'bold',
+              color: '#FFFFFF',
+              marginBottom: '16px',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Pronto para Começar?
+            </h3>
+            <p style={{
+              fontSize: 'clamp(16px, 4vw, 18px)',
+              color: 'rgba(255, 255, 255, 0.8)',
+              marginBottom: '32px',
+              maxWidth: '600px',
+              margin: '0 auto 32px auto',
+              fontFamily: 'Cal Sans, Inter, sans-serif'
+            }}>
+              Experimente todas essas funcionalidades e transforme o treinamento da sua equipe com IA conversacional
+            </p>
+            <Link 
+              to="/dashboard" 
+              style={{ 
+                display: 'inline-block',
+                padding: 'clamp(16px, 4vw, 20px) clamp(32px, 8vw, 48px)',
+                borderRadius: '16px',
+                background: 'linear-gradient(90deg, #8601F8 0%, #00FF99 100%)',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                fontSize: 'clamp(16px, 4vw, 20px)',
+                fontWeight: '600',
+                fontFamily: 'Cal Sans, Inter, sans-serif',
+                boxShadow: '0 20px 40px rgba(134, 1, 248, 0.4)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = '0 25px 50px rgba(134, 1, 248, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(134, 1, 248, 0.4)';
+              }}
+            >
+              Acessar Plataforma →
+            </Link>
+          </div>
+
         </div>
       </section>
 
