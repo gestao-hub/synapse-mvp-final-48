@@ -30,8 +30,8 @@ export default function NavBar() {
   )
   
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-deep-black/40 backdrop-blur">
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-6">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-deep-black/95 backdrop-blur-sm">
+      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-4 min-h-[60px]">
         <Link to="/" className="flex items-center gap-2">
           <img src="/lovable-uploads/1d200d09-b793-4be8-b565-c11a2585a9e4.png" alt="Excluv.ia" className="w-8 h-8" />
           <span className="font-cal text-sm opacity-80 hidden sm:block">by Excluv.ia</span>
