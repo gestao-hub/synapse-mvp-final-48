@@ -50,14 +50,14 @@ export default function Home() {
           <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-spring/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
         
-        <div className="relative container mx-auto px-6 py-6 text-center">
+        <div className="relative container mx-auto px-4 sm:px-6 py-6 text-center">
           {/* Synapse Title with enhanced hover effects */}
-          <div className="relative group mb-12">
+          <div className="relative group mb-8 sm:mb-12">
             {/* Background glow effect */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#d946ef] via-[#3b82f6] to-[#00d9ff] opacity-30 blur-3xl group-hover:opacity-50 transition-opacity duration-500" />
             
             {/* Main title */}
-            <h1 className="relative text-8xl md:text-9xl font-bold bg-gradient-to-r from-[#8601F8] to-[#00FF99] bg-clip-text text-transparent tracking-tight group-hover:scale-105 transition-transform duration-500">
+            <h1 className="relative text-6xl sm:text-8xl md:text-9xl font-bold bg-gradient-to-r from-[#8601F8] to-[#00FF99] bg-clip-text text-transparent tracking-tight group-hover:scale-105 transition-transform duration-500">
               Synapse
             </h1>
             
@@ -65,10 +65,10 @@ export default function Home() {
           </div>
           
           {/* Interactive subtitle */}
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <InteractiveTextAnimation 
               text="Revolucione sua empresa com Inteligência Artificial"
-              className="text-4xl md:text-6xl font-bold max-w-6xl mx-auto leading-tight"
+              className="text-2xl sm:text-4xl md:text-6xl font-bold max-w-6xl mx-auto leading-tight"
               specialWords={[
                 { word: 'Revolucione', className: 'text-white' },
                 { word: 'Inteligência', className: 'text-[#8601F8]' },
@@ -77,7 +77,7 @@ export default function Home() {
             />
           </div>
           
-          <p className="text-xl md:text-2xl text-white/70 mb-24 max-w-5xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-white/70 mb-16 sm:mb-24 max-w-5xl mx-auto leading-relaxed px-4">
             A Excluv.ia Corporate desenvolve soluções de IA conversacional para transformar treinamentos, atendimento e processos empresariais com tecnologia de ponta.
           </p>
 
@@ -194,69 +194,68 @@ export default function Home() {
             }} />
           </div>
           
-          <div className="container mx-auto px-6 text-center relative z-20">
-            <h2 className="text-5xl md:text-7xl font-bold mb-12 leading-tight">
+          <div className="container mx-auto px-4 sm:px-6 text-center relative z-20">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-8 sm:mb-12 leading-tight">
               <span className="text-white drop-shadow-lg">interação conversacional </span>
               <span className="text-white drop-shadow-lg">ao vivo</span>
               <span className="text-white drop-shadow-lg"> com </span>
               <span className="bg-gradient-to-r from-[#d946ef] to-[#8b5cf6] bg-clip-text text-transparent drop-shadow-lg">I.A</span>
             </h2>
             
-            <p className="text-xl md:text-2xl text-white/95 max-w-5xl mx-auto leading-relaxed drop-shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/95 max-w-5xl mx-auto leading-relaxed drop-shadow-md px-4">
               Experimente o futuro da comunicação empresarial com tecnologia de ponta que transforma cada interação em uma experiência única e inteligente.
             </p>
           </div>
         </section>
 
-      {/* Soluções Empresariais Inovadoras */}
-      <section className="py-32 bg-midnight">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+      <section className="py-16 sm:py-32 bg-midnight">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-20">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 sm:mb-6">
               Soluções Empresariais Inovadoras
             </h2>
-            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-4xl mx-auto px-4">
               Transformamos desafios empresariais em oportunidades com IA conversacional avançada
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-            <div className="bg-gradient-to-br from-purple/20 to-purple/10 backdrop-blur rounded-2xl p-8 text-center space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-purple/30 hover:to-purple/20 transition-all duration-300 border border-purple/20">
-              <div className="w-16 h-16 mx-auto rounded-full bg-purple/30 flex items-center justify-center">
-                <Mic className="w-8 h-8 text-purple" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-7xl mx-auto">
+            <div className="bg-gradient-to-br from-purple/20 to-purple/10 backdrop-blur rounded-2xl p-6 sm:p-8 text-center space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-purple/30 hover:to-purple/20 transition-all duration-300 border border-purple/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple/30 flex items-center justify-center">
+                <Mic className="w-6 h-6 sm:w-8 sm:h-8 text-purple" />
               </div>
-              <h3 className="text-xl font-bold text-white">IA Conversacional</h3>
-              <p className="text-white/70">
+              <h3 className="text-lg sm:text-xl font-bold text-white">IA Conversacional</h3>
+              <p className="text-sm sm:text-base text-white/70">
                 Interações naturais e inteligentes com tecnologia de ponta
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-spring/20 to-spring/10 backdrop-blur rounded-2xl p-8 text-center space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-spring/30 hover:to-spring/20 transition-all duration-300 border border-spring/20">
-              <div className="w-16 h-16 mx-auto rounded-full bg-spring/30 flex items-center justify-center">
-                <Target className="w-8 h-8 text-spring" />
+            <div className="bg-gradient-to-br from-spring/20 to-spring/10 backdrop-blur rounded-2xl p-6 sm:p-8 text-center space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-spring/30 hover:to-spring/20 transition-all duration-300 border border-spring/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-spring/30 flex items-center justify-center">
+                <Target className="w-6 h-6 sm:w-8 sm:h-8 text-spring" />
               </div>
-              <h3 className="text-xl font-bold text-white">Treinamento Personalizado</h3>
-              <p className="text-white/70">
+              <h3 className="text-lg sm:text-xl font-bold text-white">Treinamento Personalizado</h3>
+              <p className="text-sm sm:text-base text-white/70">
                 Soluções adaptadas às necessidades específicas da sua empresa
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-purple/20 to-purple/10 backdrop-blur rounded-2xl p-8 text-center space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-purple/30 hover:to-purple/20 transition-all duration-300 border border-purple/20">
-              <div className="w-16 h-16 mx-auto rounded-full bg-purple/30 flex items-center justify-center">
-                <Zap className="w-8 h-8 text-purple" />
+            <div className="bg-gradient-to-br from-purple/20 to-purple/10 backdrop-blur rounded-2xl p-6 sm:p-8 text-center space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-purple/30 hover:to-purple/20 transition-all duration-300 border border-purple/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-purple/30 flex items-center justify-center">
+                <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-purple" />
               </div>
-              <h3 className="text-xl font-bold text-white">Resultados Rápidos</h3>
-              <p className="text-white/70">
+              <h3 className="text-lg sm:text-xl font-bold text-white">Resultados Rápidos</h3>
+              <p className="text-sm sm:text-base text-white/70">
                 Implementação ágil com impacto imediato nos resultados
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-spring/20 to-spring/10 backdrop-blur rounded-2xl p-8 text-center space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-spring/30 hover:to-spring/20 transition-all duration-300 border border-spring/20">
-              <div className="w-16 h-16 mx-auto rounded-full bg-spring/30 flex items-center justify-center">
-                <Shield className="w-8 h-8 text-spring" />
+            <div className="bg-gradient-to-br from-spring/20 to-spring/10 backdrop-blur rounded-2xl p-6 sm:p-8 text-center space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-br hover:from-spring/30 hover:to-spring/20 transition-all duration-300 border border-spring/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full bg-spring/30 flex items-center justify-center">
+                <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-spring" />
               </div>
-              <h3 className="text-xl font-bold text-white">Segurança Empresarial</h3>
-              <p className="text-white/70">
+              <h3 className="text-lg sm:text-xl font-bold text-white">Segurança Empresarial</h3>
+              <p className="text-sm sm:text-base text-white/70">
                 Proteção de dados e conformidade com padrões corporativos
               </p>
             </div>
@@ -265,79 +264,79 @@ export default function Home() {
       </section>
 
       {/* Nichos de Aplicação */}
-      <section className="py-32 bg-white/5">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+      <section className="py-16 sm:py-32 bg-white/5">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-20">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-4 sm:mb-6">
               Nichos de Aplicação
             </h2>
-            <p className="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-4xl mx-auto px-4">
               Descubra como o Synapse pode transformar diferentes áreas da sua empresa com soluções personalizadas
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
-                <TrendingUp className="w-8 h-8 text-purple" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-purple" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Vendas Corporativas</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Vendas Corporativas</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Treine equipes comerciais com simulações realistas de negociação, objeções e fechamento. 
                 Melhore conversões e desenvolva habilidades de vendas com feedback instantâneo.
               </p>
             </div>
 
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
-                <Users className="w-8 h-8 text-spring" />
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-spring" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Treinamento de RH</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Treinamento de RH</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Capacite profissionais de RH em processos seletivos, entrevistas comportamentais e 
                 gestão de conflitos com simulações interativas e avaliações detalhadas.
               </p>
             </div>
 
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
-                <GraduationCap className="w-8 h-8 text-purple" />
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 text-purple" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Educação/Faculdades</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Educação/Faculdades</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Revolucione o ensino com IA conversacional para práticas de apresentação, debates 
                 acadêmicos e preparação profissional. Engaje estudantes com aprendizado interativo.
               </p>
             </div>
 
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
-                <HeadphonesIcon className="w-8 h-8 text-spring" />
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
+                <HeadphonesIcon className="w-6 h-6 sm:w-8 sm:h-8 text-spring" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Atendimento ao Cliente</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Atendimento ao Cliente</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Aprimore habilidades de atendimento com cenários complexos de suporte, resolução 
                 de problemas e gestão de clientes difíceis através de simulações realistas.
               </p>
             </div>
 
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
-                <Briefcase className="w-8 h-8 text-purple" />
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-purple/30 to-purple/20 flex items-center justify-center">
+                <Briefcase className="w-6 h-6 sm:w-8 sm:h-8 text-purple" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Liderança e Gestão</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Liderança e Gestão</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Desenvolva líderes com práticas de comunicação, tomada de decisão e gestão de equipes. 
                 Simulações de situações críticas para formar gestores mais preparados.
               </p>
             </div>
 
-            <div className="card p-8 space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
-                <Brain className="w-8 h-8 text-spring" />
+            <div className="card p-6 sm:p-8 space-y-4 sm:space-y-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white/10 to-white/5 border border-white/20">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-spring/30 to-spring/20 flex items-center justify-center">
+                <Brain className="w-6 h-6 sm:w-8 sm:h-8 text-spring" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Desenvolvimento Técnico</h3>
-              <p className="text-white/70 text-lg leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">Desenvolvimento Técnico</h3>
+              <p className="text-white/70 text-base sm:text-lg leading-relaxed">
                 Capacite equipes técnicas com simulações de cenários complexos, resolução de problemas 
                 e comunicação técnica eficaz para melhor colaboração interdisciplinar.
               </p>

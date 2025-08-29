@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
 
 const allLinks = [
   { href: '/dashboard', label: 'Dashboard', roles: ['admin', 'gestor'] },
@@ -20,6 +22,7 @@ const allLinks = [
 export default function NavBar() {
   const location = useLocation()
   const { profile, isAuthenticated, signOut } = useAuthStore()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
   // Filter links based on user role
   const visibleLinks = allLinks.filter(link => 
@@ -31,9 +34,10 @@ export default function NavBar() {
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-6">
         <Link to="/" className="flex items-center gap-2">
           <img src="/lovable-uploads/1d200d09-b793-4be8-b565-c11a2585a9e4.png" alt="Excluv.ia" className="w-8 h-8" />
-          <span className="font-cal text-sm opacity-80">by Excluv.ia</span>
+          <span className="font-cal text-sm opacity-80 hidden sm:block">by Excluv.ia</span>
         </Link>
         
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-3">
           {visibleLinks.map(l => (
             <Link
@@ -49,10 +53,22 @@ export default function NavBar() {
         </nav>
         
         <div className="ml-auto flex items-center gap-3">
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5 text-white" />
+            ) : (
+              <Menu className="w-5 h-5 text-white" />
+            )}
+          </button>
+
           {isAuthenticated && profile ? (
-            <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-white/80">{profile.display_name || profile.email}</span>
+                <span className="text-sm text-white/80 hidden lg:block">{profile.display_name || profile.email}</span>
                 <Badge variant="outline" className="text-xs capitalize">
                   {profile.role}
                 </Badge>
@@ -71,6 +87,46 @@ export default function NavBar() {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-deep-black/95 backdrop-blur border-t border-white/10">
+          <nav className="px-4 py-4 space-y-2">
+            {visibleLinks.map(l => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className={`block px-4 py-3 rounded-xl transition ${
+                  location.pathname?.startsWith(l.href) ? 'bg-white/10 text-white' : 'text-white/80 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+            
+            {/* Mobile Auth Section */}
+            {isAuthenticated && profile && (
+              <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
+                <div className="px-4 py-2 text-sm text-white/80">
+                  {profile.display_name || profile.email}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-white/80 border-white/20 hover:bg-white/10"
+                >
+                  Sair
+                </Button>
+              </div>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   )
 }
