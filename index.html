@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synapse — Treinamentos por Voz com IA</title>
+    <meta name="description" content="Excluv.ia Synapse: comercial, RH, educacional e gestão com conversação em tempo real." />
+    <meta name="author" content="Excluv.ia" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Axiforma:wght@400;500;600;700&display=swap">
+
+    <meta property="og:title" content="Synapse — Treinamentos por Voz com IA" />
+    <meta property="og:description" content="Excluv.ia Synapse: comercial, RH, educacional e gestão com conversação em tempo real." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Chatvolt Chat Widget -->
+    <script type="module">
+      import Chatbox from 'https://cdn.jsdelivr.net/npm/@chatvolt/embeds@latest/dist/chatbox/index.js';
+
+      async function initChatWidget() {
+        try {
+          const widget = await Chatbox.initBubble({
+            agentId: 'cmevx78tx00kcy9bgkep2bscb',
+
+            //[optional] If provided will create a contact for the user and link it to the conversation
+            contact: {
+              firstName: '',
+              lastName: '',
+              email: '',
+              phoneNumber: '',
+            },
+             
+            //[optional] Override initial messages
+            interface: {
+              initialMessages: [
+                'Olá! Seja bem-vindo ao Synapse!',
+                'Como posso ajudá-lo com nossos treinamentos por voz com IA?',
+              ],
+            },
+            
+            //[optional] Provided context will be Appended to the Agent system prompt
+            context: "O usuário está interessado em conhecer mais sobre o Synapse - plataforma de treinamentos por voz com IA da Excluv.ia para áreas comercial, RH, educacional e gestão.",
+          });
+        } catch (error) {
+          console.error('Erro ao inicializar chat widget:', error);
+        }
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initChatWidget);
+      } else {
+        initChatWidget();
+      }
+    </script>
+
+    <!-- CSS Customizado para Chatvolt Widget - Identidade Synapse -->
+    <style>
+      /* CSS customizado para o widget Chatvolt com identidade Synapse */
+      
+      /* Bubble button styling - inspirado no design Synapse */
+      [data-cy="chatbox-button"] {
+        background: linear-gradient(135deg, #8601F8 0%, #00FF99 100%) !important;
+        border: 2px solid rgba(0, 255, 153, 0.3) !important;
+        border-radius: 50% !important;
+        box-shadow: 
+          0 10px 30px rgba(134, 1, 248, 0.3),
+          0 0 40px rgba(0, 255, 153, 0.2) !important;
+        backdrop-filter: blur(12px) !important;
+        width: 60px !important;
+        height: 60px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        animation: synapse-pulse 3s ease-in-out infinite !important;
+      }
+
+      [data-cy="chatbox-button"]:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 
+          0 15px 40px rgba(134, 1, 248, 0.5),
+          0 0 60px rgba(0, 255, 153, 0.4) !important;
+        background: linear-gradient(135deg, #a020ff 0%, #20ff99 100%) !important;
+      }
+
+      /* Chat window container - Synapse styling */
+      [data-cy="chatbox-iframe-container"] {
+        border-radius: 24px !important;
+        border: 2px solid rgba(0, 255, 153, 0.3) !important;
+        box-shadow: 
+          0 25px 50px rgba(134, 1, 248, 0.2),
+          0 10px 30px rgba(0, 1, 49, 0.3) !important;
+        backdrop-filter: blur(20px) !important;
+        overflow: hidden !important;
+      }
+
+      /* Chat window iframe styling */
+      [data-cy="chatbox-iframe"] {
+        border-radius: 24px !important;
+        background: linear-gradient(135deg, #000131 0%, #0C0C0D 100%) !important;
+      }
+
+      /* CSS para dentro do iframe - inject via JS */
+      .synapse-chat-styles {
+        /* Header do chat */
+        background: linear-gradient(135deg, #000131 0%, #0C0C0D 100%) !important;
+        border-bottom: 2px solid rgba(0, 255, 153, 0.2) !important;
+        color: #FFFFFF !important;
+        font-family: 'Cal Sans', 'Inter', system-ui, sans-serif !important;
+      }
+
+      /* Animação personalizada Synapse */
+      @keyframes synapse-pulse {
+        0%, 100% { 
+          transform: scale(1);
+          box-shadow: 
+            0 10px 30px rgba(134, 1, 248, 0.3),
+            0 0 40px rgba(0, 255, 153, 0.2);
+        }
+        50% { 
+          transform: scale(1.05);
+          box-shadow: 
+            0 15px 40px rgba(134, 1, 248, 0.5),
+            0 0 60px rgba(0, 255, 153, 0.4);
+        }
+      }
+
+      /* Responsividade mobile */
+      @media (max-width: 768px) {
+        [data-cy="chatbox-button"] {
+          width: 55px !important;
+          height: 55px !important;
+        }
+        
+        [data-cy="chatbox-iframe-container"] {
+          margin: 10px !important;
+          border-radius: 20px !important;
+        }
+      }
+
+      /* Animação de abertura suave */
+      [data-cy="chatbox-iframe-container"][data-opened="true"] {
+        animation: synapse-chat-open 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      }
+
+      @keyframes synapse-chat-open {
+        0% {
+          transform: scale(0.8) translateY(20px);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Styling para o ícone do chat */
+      [data-cy="chatbox-button"] svg {
+        color: #FFFFFF !important;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) !important;
+      }
+
+      /* Glow effect personalizado */
+      [data-cy="chatbox-button"]::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #8601F8, #00FF99);
+        z-index: -1;
+        filter: blur(8px);
+        opacity: 0.6;
+        animation: synapse-glow 2s ease-in-out infinite alternate !important;
+      }
+
+      @keyframes synapse-glow {
+        0% { opacity: 0.4; transform: scale(0.95); }
+        100% { opacity: 0.8; transform: scale(1.05); }
+      }
+    </style>
+  </body>
+</html>

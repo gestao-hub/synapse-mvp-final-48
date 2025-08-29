@@ -1,0 +1,694 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { 
+    --bg: #000131; 
+    --fg: #FFFFFF; 
+    --muted: rgba(255,255,255,.72);
+    --background: 240 100% 6%;  /* Midnight Blue em HSL: #000131 */
+    --foreground: 0 0% 100%;    /* Pure White em HSL: #FFFFFF */
+    --card: 240 100% 6%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 100% 6%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 266 98% 49%;      /* Electric Purple em HSL: #8601F8 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 159 100% 50%;   /* Spring Green em HSL: #00FF99 */
+    --secondary-foreground: 240 100% 6%;
+    --muted: 240 6% 5%;          /* Deep Black em HSL: #0C0C0D */
+    --muted-foreground: 0 0% 65%;
+    --accent: 266 98% 49%;       /* Electric Purple */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 15%;        /* Darker variant of Deep Black */
+    --input: 240 6% 10%;         /* Deep Black variant */
+    --ring: 266 98% 49%;         /* Electric Purple */
+    --radius: 0.5rem;
+    --sidebar-background: 240 100% 6%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 266 98% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 6% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 6% 15%;
+    --sidebar-ring: 159 100% 50%;
+  }
+  
+  html, body { 
+    @apply bg-brand-bg text-[var(--fg)] min-h-screen; 
+  }
+}
+
+
+@layer components {
+  .btn-primary {
+    @apply text-white rounded-2xl shadow-soft px-5 py-3 inline-flex items-center justify-center;
+    background-image: linear-gradient(90deg,#8601F8 0%,#00FF99 100%);
+  }
+  .card { 
+    @apply rounded-2xl shadow-soft border border-white/10 bg-white/5 backdrop-blur; 
+  }
+  .text-gradient {
+    background: linear-gradient(90deg,#8601F8 0%,#00FF99 100%);
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    color: transparent;
+  }
+  }
+  
+  /* Excluv.ia Circuit Animation Styles */
+  .circuit-animation-excluvia {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: linear-gradient(135deg, #000131 0%, #0C0C0D 100%);  /* Midnight Blue to Deep Black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Cal Sans', 'Inter', sans-serif;
+  }
+
+  .circuit-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .circuit-paths path {
+    stroke: rgba(134, 1, 248, 0.3);  /* Electric Purple translucent */
+    stroke-width: 2;
+    fill: none;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+
+  .circuit-paths circle {
+    fill: rgba(0, 255, 153, 0.3);  /* Spring Green translucent */
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  /* Efeito hover nos caminhos */
+  .circuit-animation-excluvia:hover .circuit-paths path {
+    opacity: 1;
+    stroke: rgba(134, 1, 248, 0.8);  /* Electric Purple stronger */
+  }
+
+  .circuit-animation-excluvia:hover .circuit-paths circle {
+    opacity: 1;
+    fill: rgba(0, 255, 153, 0.8);    /* Spring Green stronger */
+  }
+
+  .powered-by-chip-excluvia {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, #0C0C0D 0%, #000131 100%);  /* Deep Black to Midnight Blue */
+    color: #FFFFFF;
+    padding: 20px 36px;
+    border-radius: 16px;
+    font-family: 'Cal Sans', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 
+      0 12px 48px rgba(0, 255, 153, 0.15),
+      0 6px 24px rgba(134, 1, 248, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 255, 153, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    animation: pulse-excluvia 4s ease-in-out infinite;
+  }
+
+  /* Efeito de brilho sutil no fundo do chip */
+  .powered-by-chip-excluvia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 153, 0.1), transparent);
+    animation: shimmer 3s infinite;
+    z-index: -1;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  @keyframes pulse-excluvia {
+    0%, 100% { 
+      opacity: 0.95;
+      transform: scale(1);
+      box-shadow: 
+        0 12px 48px rgba(0, 255, 153, 0.15),
+        0 6px 24px rgba(134, 1, 248, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    }
+    50% { 
+      opacity: 1;
+      transform: scale(1.02);
+      box-shadow: 
+        0 16px 64px rgba(0, 255, 153, 0.25),
+        0 8px 32px rgba(134, 1, 248, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .powered-text {
+    color: #FFFFFF;
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  .brand-name {
+    background: linear-gradient(135deg, #00FF99 0%, #8601F8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+
+  /* Efeito de brilho no texto da marca */
+  .brand-name::after {
+    content: 'Excluv.ia';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(135deg, #00FF99 0%, #8601F8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(8px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  .light {
+    filter: drop-shadow(0 0 12px currentColor);
+  }
+
+  .light-green {
+    filter: drop-shadow(0 0 12px #00FF99) drop-shadow(0 0 24px #00FF99);
+  }
+
+  .light-purple {
+    filter: drop-shadow(0 0 12px #8601F8) drop-shadow(0 0 24px #8601F8);
+  }
+
+  /* Versão Compacta */
+  .circuit-animation-excluvia.compact {
+    height: 300px;
+  }
+
+  .circuit-animation-excluvia.compact .powered-by-chip-excluvia {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .circuit-animation-excluvia.compact .powered-text {
+    font-size: 12px;
+  }
+
+  .circuit-animation-excluvia.compact .brand-name {
+    font-size: 16px;
+  }
+
+  /* Versão Interativa */
+  .circuit-animation-excluvia.interactive:hover .light {
+    animation-duration: 1s !important;
+  }
+
+  .circuit-animation-excluvia.interactive:hover .powered-by-chip-excluvia {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .circuit-animation-excluvia {
+      height: 450px;
+    }
+    
+    .powered-by-chip-excluvia {
+      font-size: 16px;
+      padding: 16px 28px;
+    }
+    
+    .powered-text {
+      font-size: 14px;
+    }
+    
+    .brand-name {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .circuit-animation-excluvia {
+      height: 350px;
+    }
+    
+    .powered-by-chip-excluvia {
+      font-size: 14px;
+      padding: 12px 24px;
+    }
+    
+    .powered-text {
+      font-size: 12px;
+    }
+    
+    .brand-name {
+      font-size: 18px;
+    }
+  }
+
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    .circuit-animation-excluvia * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+    
+    .powered-by-chip-excluvia::before {
+      animation: none;
+    }
+  }
+
+  /* Modo escuro adicional */
+  @media (prefers-color-scheme: dark) {
+    .circuit-animation-excluvia {
+      background: linear-gradient(135deg, #000131 0%, #0C0C0D 100%);  /* Midnight Blue to Deep Black */
+    }
+  }
+
+  /* Animações de voz melhoradas */
+  @keyframes glow-pulse {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(134, 1, 248, 0.3);
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(134, 1, 248, 0.6);
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes brain-pulse {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    50% { 
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  @keyframes tracer-line {
+    0% { 
+      stroke-dasharray: 0 200;
+      opacity: 0;
+    }
+    20% { 
+      opacity: 1;
+    }
+    100% { 
+      stroke-dasharray: 200 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes neural-fire {
+    0% { 
+      transform: translateX(0) scale(0);
+      opacity: 0;
+    }
+    20% { 
+      opacity: 1;
+      transform: translateX(10px) scale(1);
+    }
+    80% { 
+      opacity: 1;
+      transform: translateX(60px) scale(0.8);
+    }
+    100% { 
+      opacity: 0;
+      transform: translateX(80px) scale(0);
+    }
+  }
+
+  /* Novas animações PulsingOrb - SEMPRE funcionam */
+  @keyframes pulse-slow {
+    0%, 100% { 
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes voice-active {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 0.8;
+    }
+    25% {
+      transform: scale(1.05) rotate(90deg);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1) rotate(180deg);
+      opacity: 0.9;
+    }
+    75% {
+      transform: scale(1.05) rotate(270deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes voice-idle {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.03) rotate(180deg);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes orbit-particle {
+    0% {
+      transform: rotate(0deg) translateX(40px) rotate(0deg);
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(360deg) translateX(40px) rotate(-360deg);
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes core-pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 20px currentColor;
+    }
+    50% {
+      transform: scale(1.15);
+      box-shadow: 0 0 40px currentColor;
+    }
+  }
+
+  @keyframes inner-glow {
+    0%, 100% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes wave-1 {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes wave-2 {
+    0% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(1.8);
+      opacity: 0;
+    }
+  }
+
+  @keyframes wave-3 {
+    0% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-particle {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px) scale(0.5);
+      opacity: 0.3;
+    }
+    25% {
+      transform: translateY(-10px) translateX(5px) scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: translateY(-5px) translateX(-3px) scale(0.8);
+      opacity: 1;
+    }
+    75% {
+      transform: translateY(-15px) translateX(-8px) scale(1);
+      opacity: 0.5;
+    }
+  }
+
+  /* Siri-like wave animations */
+  @keyframes siri-wave-1 {
+    0%, 100% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * 10px), -50%) scaleX(1) scaleY(1);
+      opacity: 0.9;
+    }
+    50% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * -10px), -50%) scaleX(calc(1 + var(--audio-intensity, 0) * 0.5)) scaleY(calc(1 + var(--audio-intensity, 0) * 2));
+      opacity: 1;
+    }
+  }
+
+  @keyframes siri-wave-2 {
+    0%, 100% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * -8px), -50%) scaleX(1) scaleY(0.8);
+      opacity: 0.7;
+    }
+    50% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * 8px), -50%) scaleX(calc(1 + var(--audio-intensity, 0) * 0.3)) scaleY(calc(1 + var(--audio-intensity, 0) * 1.5));
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes siri-wave-3 {
+    0%, 100% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * 12px), -50%) scaleX(1) scaleY(0.6);
+      opacity: 0.6;
+    }
+    50% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * -12px), -50%) scaleX(calc(1 + var(--audio-intensity, 0) * 0.4)) scaleY(calc(1 + var(--audio-intensity, 0) * 1.8));
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes siri-wave-bg {
+    0%, 100% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * 5px), -50%) scaleY(0.5);
+      opacity: 0.4;
+    }
+    50% { 
+      transform: translate(calc(-50% + var(--audio-intensity, 0) * -5px), -50%) scaleY(calc(1 + var(--audio-intensity, 0) * 1.0));
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes siri-particle {
+    0% { 
+      transform: translateY(0px) scale(0.5);
+      opacity: 0;
+    }
+    50% { 
+      transform: translateY(-20px) scale(1);
+      opacity: calc(0.5 + var(--audio-intensity, 0) * 0.4);
+    }
+    100% { 
+      transform: translateY(-40px) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  /* Classes de animação */
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  .animate-voice-active {
+    animation: voice-active 2s ease-in-out infinite;
+  }
+
+  .animate-voice-idle {
+    animation: voice-idle 4s ease-in-out infinite;
+  }
+
+  .animate-orbit-particle {
+    animation: orbit-particle 3s linear infinite;
+  }
+
+  .animate-core-pulse {
+    animation: core-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-inner-glow {
+    animation: inner-glow 1.5s ease-in-out infinite;
+  }
+
+  .animate-wave-1 {
+    animation: wave-1 2s ease-out infinite;
+  }
+
+  .animate-wave-2 {
+    animation: wave-2 2.5s ease-out infinite 0.5s;
+  }
+
+  .animate-wave-3 {
+    animation: wave-3 3s ease-out infinite 1s;
+  }
+
+  .animate-float-particle {
+    animation: float-particle 2s ease-in-out infinite;
+  }
+
+  /* Siri-like animation classes */
+  .animate-siri-wave-1 {
+    animation: siri-wave-1 1.5s ease-in-out infinite;
+  }
+
+  .animate-siri-wave-2 {
+    animation: siri-wave-2 1.5s ease-in-out infinite;
+  }
+
+  .animate-siri-wave-3 {
+    animation: siri-wave-3 1.5s ease-in-out infinite;
+  }
+
+  .animate-siri-wave-bg {
+    animation: siri-wave-bg 1.8s ease-in-out infinite;
+  }
+
+  .animate-siri-particle {
+    animation: siri-particle 2s ease-in-out infinite;
+  }
+
+  /* Custom Scrollbar - Identidade Visual */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    border-radius: 4px;
+    border: 1px solid hsl(var(--border));
+    transition: all 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 80%);
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: hsl(var(--primary));
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: hsl(var(--muted));
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    
+    /* Touch-friendly targets */
+    button, .clickable, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+    
+    /* Better performance on mobile */
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Prevent zooming on inputs */
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+    
+    /* Reduce motion for battery saving */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  }
+
+  /* High DPI displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    canvas {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: optimize-contrast;
+    }
+  }
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
