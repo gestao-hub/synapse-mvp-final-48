@@ -1,15 +1,18 @@
 import { Outlet, Link } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 export function PublicLayout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
   return <div className="min-h-screen bg-midnight text-white">
       {/* Header - exact replication from reference */}
       <header className="border-b border-white/10 bg-[#1a1b3e]/95 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 h-16 flex items-center">
+        <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Logo excluv.ia corporate - exact styling */}
           <div className="flex items-center">
-            <img src="/lovable-uploads/82c16bce-21ab-4d7f-96b0-94d72a867a2e.png" alt="Excluv.ia Corporate" className="h-48" />
+            <img src="/lovable-uploads/82c16bce-21ab-4d7f-96b0-94d72a867a2e.png" alt="Excluv.ia Corporate" className="h-8 sm:h-10" />
           </div>
 
           {/* Central Navigation - centered */}
@@ -22,7 +25,7 @@ export function PublicLayout() {
                 Produtos
                 <ChevronDown className="ml-1 h-3 w-3" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-64 bg-[#1e1e2e] border border-white/10 shadow-xl z-50 p-2 rounded-lg font-cal">
+              <DropdownMenuContent align="center" className="w-64 bg-[#1e1e2e]/95 backdrop-blur-sm border border-white/10 shadow-xl z-[60] p-2 rounded-lg font-cal">
                 {/* Synapse Header - destaque principal */}
                 <DropdownMenuItem asChild>
                   <Link to="/" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#00d9ff] to-[#00a8cc] text-white hover:from-[#00c8ee] hover:to-[#0096bb] transition-all duration-200">
@@ -84,7 +87,93 @@ export function PublicLayout() {
               Contato
             </Link>
           </nav>
+          
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6 text-white" />
+            ) : (
+              <Menu className="w-6 h-6 text-white" />
+            )}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#1a1b3e]/98 backdrop-blur-sm border-t border-white/10">
+            <nav className="px-4 py-4 space-y-2">
+              <Link
+                to="/"
+                className="block px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              
+              {/* Mobile Products Section */}
+              <div className="space-y-2">
+                <div className="px-4 py-2 text-sm text-white/60 font-semibold">Produtos</div>
+                
+                <Link
+                  to="/"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#00d9ff] to-[#00a8cc] text-white transition-all duration-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-2 h-2 rounded-full bg-white"></div>
+                  Synapse
+                </Link>
+                
+                <Link
+                  to="/synapse-comercial"
+                  className="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-4 h-4 rounded bg-gradient-to-br from-purple-500 to-blue-500"></div>
+                  Synapse Comercial
+                </Link>
+                
+                <Link
+                  to="/synapse-rh"
+                  className="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-4 h-4 rounded bg-gradient-to-br from-green-500 to-teal-500"></div>
+                  Synapse RH
+                </Link>
+                
+                <Link
+                  to="/synapse-educacional"
+                  className="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-4 h-4 rounded bg-gradient-to-br from-indigo-500 to-purple-500"></div>
+                  Synapse Educacional
+                </Link>
+                
+                <Link
+                  to="/synapse-gestao"
+                  className="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 transition-colors rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-4 h-4 rounded bg-gradient-to-br from-yellow-500 to-orange-500"></div>
+                  Synapse Gestão
+                </Link>
+              </div>
+              
+              <Link
+                to="/contato"
+                className="block px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contato
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
