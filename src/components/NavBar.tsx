@@ -83,7 +83,15 @@ export default function NavBar() {
               </Button>
             </div>
           ) : (
-            null
+            <Link to="/login">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-white/80 border-white/20 hover:bg-white/10"
+              >
+                Login
+              </Button>
+            </Link>
           )}
         </div>
       </div>
