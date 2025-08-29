@@ -131,6 +131,19 @@ export default function NavBar() {
                   Sair
                 </Button>
               </div>
+            ) : (
+              <div className="border-t border-white/10 pt-4 mt-4">
+                <Link to="/login">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full text-white/80 border-white/20 hover:bg-white/10"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              </div>
             )}
           </nav>
         </div>
