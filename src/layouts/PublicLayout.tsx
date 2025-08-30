@@ -1,10 +1,13 @@
 import { Outlet, Link } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { useAuthStore } from '@/stores/authStore';
+import { Button } from '@/components/ui/button';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 export function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated, profile, signOut } = useAuthStore();
   
   return <div className="min-h-screen bg-midnight text-white">
       {/* Header - exact replication from reference */}
@@ -87,6 +90,33 @@ export function PublicLayout() {
               Contato
             </Link>
           </nav>
+
+          {/* Auth Section */}
+          <div className="hidden md:flex items-center gap-3">
+            {isAuthenticated && profile ? (
+              <>
+                <span className="text-sm text-white/70">{profile.display_name || profile.email}</span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => signOut()}
+                  className="text-white/80 border-white/20 hover:bg-white/10"
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link to="/login">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-white/80 border-white/20 hover:bg-white/10"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
           
           {/* Mobile Menu Button */}
           <button
@@ -171,6 +201,38 @@ export function PublicLayout() {
               >
                 Contato
               </Link>
+
+              {/* Mobile Auth Section */}
+              <div className="border-t border-white/10 pt-4 mt-4">
+                {isAuthenticated && profile ? (
+                  <>
+                    <div className="px-4 py-2 text-sm text-white/70">
+                      {profile.display_name || profile.email}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        signOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full mx-4 text-white/80 border-white/20 hover:bg-white/10"
+                    >
+                      Sair
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full mx-4 text-white/80 border-white/20 hover:bg-white/10"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </nav>
           </div>
         )}
