@@ -18,13 +18,13 @@ serve(async (req) => {
         text, 
         model_id: modelId, 
         voice_settings: { 
-          stability: 0.6, 
-          similarity_boost: 0.8, 
-          style: 0.2,
+          stability: 0.4, 
+          similarity_boost: 0.9, 
+          style: 0.1,
           use_speaker_boost: true 
         },
         pronunciation_dictionary_locators: [{
-          pronunciation_dictionary_id: "21m00Tcm4TlvDq8ikWAM", // Portuguese pronunciation
+          pronunciation_dictionary_id: "21m00Tcm4TlvDq8ikWAM",
           version_id: "21m00Tcm4TlvDq8ikWAM"
         }]
       }),

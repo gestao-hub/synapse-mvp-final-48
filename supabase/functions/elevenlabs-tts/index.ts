@@ -17,7 +17,7 @@ serve(async (req) => {
   }
 
   try {
-    const { text, voiceId = '9BWtsMINqrJLrRacOk9x', model = 'eleven_turbo_v2_5' } = await req.json() as TTSRequest
+    const { text, voiceId = '9BWtsMINqrJLrRacOk9x', model = 'eleven_multilingual_v2' } = await req.json() as TTSRequest
     
     const elevenLabsApiKey = Deno.env.get('ELEVENLABS_API_KEY')
     if (!elevenLabsApiKey) {
@@ -35,11 +35,15 @@ serve(async (req) => {
         text,
         model_id: model,
         voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.8,
-          style: 0.0,
+          stability: 0.4,
+          similarity_boost: 0.9,
+          style: 0.1,
           use_speaker_boost: true
-        }
+        },
+        pronunciation_dictionary_locators: [{
+          pronunciation_dictionary_id: "21m00Tcm4TlvDq8ikWAM",
+          version_id: "21m00Tcm4TlvDq8ikWAM"
+        }]
       }),
     })
 
