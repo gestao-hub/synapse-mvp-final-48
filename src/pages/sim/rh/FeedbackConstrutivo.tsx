@@ -119,29 +119,25 @@ export default function RHFeedbackConstrutivo() {
           console.log('Chat result:', { reply })
           setAiReply(reply)
 
-          // 3) TTS: enviar reply para tts-elevenlabs
-          const ttsResponse = await fetch('https://roboonbdessuipvcpgve.supabase.co/functions/v1/tts-elevenlabs', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-              'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: reply }),
+          // 3) TTS: enviar reply para openai-tts
+          const ttsResponse = await supabase.functions.invoke('openai-tts', {
+            body: { text: reply }
           })
           
-          if (!ttsResponse.ok) {
-            throw new Error(`TTS failed: ${await ttsResponse.text()}`)
+          if (ttsResponse.error) {
+            throw new Error(`TTS failed: ${ttsResponse.error}`)
           }
           
-          const { audioBase64 } = await ttsResponse.json()
           console.log('TTS result: audio received')
           
           // Tocar áudio
-          const audioBlob = new Blob([Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0))], { type: 'audio/mpeg' })
-          const audioUrl = URL.createObjectURL(audioBlob)
-          const audio = new Audio(audioUrl)
-          audio.play()
+          if (ttsResponse.data) {
+            const audioBytes = new Uint8Array(await ttsResponse.data.arrayBuffer());
+            const audioBlob = new Blob([audioBytes], { type: "audio/mpeg" });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+          }
 
           // 4) Salvar sessão no Supabase
           const { data: user } = await supabase.auth.getUser()
@@ -162,7 +158,7 @@ export default function RHFeedbackConstrutivo() {
               console.log('Session saved successfully')
             }
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('Pipeline error:', error)
           setError(error.message)
         }

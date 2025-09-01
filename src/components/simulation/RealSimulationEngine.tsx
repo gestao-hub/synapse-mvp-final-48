@@ -256,7 +256,7 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
   }
 
   const textToSpeech = async (text: string): Promise<string> => {
-    const { data, error } = await supabase.functions.invoke('elevenlabs-tts', {
+    const { data, error } = await supabase.functions.invoke('openai-tts', {
       body: { text }
     })
     

@@ -286,7 +286,7 @@ export default function SimulatePage() {
       const { response: aiText } = aiResponse.data;
 
       // Generate TTS for AI response
-      const ttsResponse = await supabase.functions.invoke("tts-elevenlabs", {
+      const ttsResponse = await supabase.functions.invoke("openai-tts", {
         body: {
           text: aiText,
           voice_id: "9BWtsMINqrJLrRacOk9x" // Aria voice
@@ -294,8 +294,8 @@ export default function SimulatePage() {
       });
 
       let audioUrl = undefined;
-      if (ttsResponse.data?.audioBase64) {
-        const audioBytes = Uint8Array.from(atob(ttsResponse.data.audioBase64), c => c.charCodeAt(0));
+      if (ttsResponse.data) {
+        const audioBytes = new Uint8Array(await ttsResponse.data.arrayBuffer());
         const audioBlob = new Blob([audioBytes], { type: "audio/mpeg" });
         audioUrl = URL.createObjectURL(audioBlob);
         

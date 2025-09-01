@@ -8,7 +8,6 @@ async function runApiTest() {
   
   console.log('📊 Resultados dos testes:')
   console.log('🤖 OpenAI:', results.openai ? '✅ Funcional' : '❌ Não funcional')
-  console.log('🎤 ElevenLabs:', results.elevenlabs ? '✅ Funcional' : '❌ Não funcional') 
   console.log('🗄️ Database:', results.database ? '✅ Funcional' : '❌ Não funcional')
   
   return results

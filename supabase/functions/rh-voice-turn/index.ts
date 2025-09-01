@@ -17,9 +17,6 @@ function getCorsHeaders(origin: string | null) {
 }
 
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY")!;
-const ELEVEN_API_KEY = Deno.env.get("ELEVENLABS_API_KEY")!;
-const ELEVEN_VOICE_ID = Deno.env.get("ELEVENLABS_VOICE_ID")!;
-const ELEVEN_MODEL = Deno.env.get("ELEVENLABS_MODEL") || "eleven_multilingual_v2";
 
 const SYSTEM_PROMPT = `
 IMPORTANTE: Você DEVE falar exclusivamente em PORTUGUÊS BRASILEIRO. Nunca use espanhol, inglês ou qualquer outro idioma.
@@ -103,27 +100,18 @@ serve(async (req) => {
     if (!chatRes.ok) throw new Error(chatJson?.error?.message || "Falha no Chat");
     const assistantText: string = chatJson.choices?.[0]?.message?.content?.trim() || "Obrigado! Poderia repetir?";
 
-    // 3) TTS (ElevenLabs)
-    const ttsRes = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
+    // 3) TTS (OpenAI)
+    const ttsRes = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {
-        "xi-api-key": ELEVEN_API_KEY,
-        "Content-Type": "application/json",
-        "Accept": "audio/mpeg"
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        text: assistantText,
-        model_id: ELEVEN_MODEL,
-        voice_settings: { 
-          stability: 0.4, 
-          similarity_boost: 0.9,
-          style: 0.1,
-          use_speaker_boost: true 
-        },
-        pronunciation_dictionary_locators: [{
-          pronunciation_dictionary_id: "21m00Tcm4TlvDq8ikWAM",
-          version_id: "21m00Tcm4TlvDq8ikWAM"
-        }]
+        model: "tts-1",
+        voice: "alloy",
+        input: assistantText,
+        response_format: "mp3"
       })
     });
     if (!ttsRes.ok) {

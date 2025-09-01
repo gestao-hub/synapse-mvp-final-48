@@ -8,7 +8,6 @@ import { testApiConnections } from '@/lib/apiKeySetup'
 export function SystemStatusChecker() {
   const [status, setStatus] = useState({
     openai: false,
-    elevenlabs: false,
     database: false
   })
   const [loading, setLoading] = useState(false)
@@ -39,7 +38,7 @@ export function SystemStatusChecker() {
     )
   }
 
-  const allWorking = status.openai && status.elevenlabs && status.database
+  const allWorking = status.openai && status.database
 
   return (
     <Card className="w-full max-w-md">
@@ -55,13 +54,8 @@ export function SystemStatusChecker() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
-          <span>OpenAI (Voz → Texto)</span>
+          <span>OpenAI (Chat + Voz)</span>
           {getStatusIcon(status.openai)}
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <span>ElevenLabs (Texto → Voz)</span>
-          {getStatusIcon(status.elevenlabs)}
         </div>
         
         <div className="flex items-center justify-between">

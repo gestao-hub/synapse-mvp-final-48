@@ -38,40 +38,30 @@ export async function ensureDatabaseTables() {
   }
 }
 
-// Função para testar se as APIs estão funcionando
 export async function testApiConnections() {
   const results = {
     openai: false,
-    elevenlabs: false,
     database: false
   }
   
   try {
-    // Testar token realtime (que usa OpenAI)
+    // Testar OpenAI (token realtime que usa chat)
     const { error: tokenError } = await supabase.functions.invoke('realtime-token', {
       body: { track: 'rh', scenario: 'teste' }
     })
     
     if (!tokenError) {
-      results.openai = true
+      // Testar também o TTS da OpenAI
+      const { error: ttsError } = await supabase.functions.invoke('openai-tts', {
+        body: { text: 'teste' }
+      })
+      
+      if (!ttsError) {
+        results.openai = true
+      }
     }
   } catch (error) {
     console.log('OpenAI não configurado ainda')
-  }
-  
-  try {
-    // Testar ElevenLabs TTS com texto simples
-    const { data: ttsData, error: ttsError } = await supabase.functions.invoke('tts-elevenlabs', {
-      body: { text: 'teste' }
-    })
-    
-    console.log('ElevenLabs test result:', { ttsData, ttsError })
-    
-    if (!ttsError && ttsData?.audioBase64) {
-      results.elevenlabs = true
-    }
-  } catch (error) {
-    console.log('ElevenLabs erro:', error)
   }
   
   try {
