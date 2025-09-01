@@ -7,7 +7,7 @@ import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGrou
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAuthStore } from "@/stores/authStore";
 
-// Default scenario counts for fallback
+// Default scenario counts for fallback - based on actual database data
 const defaultScenarioCounts = {
   comercial: 1,
   rh: 10, 
