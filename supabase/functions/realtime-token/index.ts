@@ -73,7 +73,7 @@ REGRAS:
           silence_duration_ms: 500
         },
         temperature: 0.7,
-        max_response_output_tokens: 200
+        max_response_output_tokens: 400
       }),
     });
 

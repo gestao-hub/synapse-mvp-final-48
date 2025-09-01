@@ -31,7 +31,7 @@ Transcript: ${transcript}`.trim();
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "gpt-5-mini-2025-08-07", max_completion_tokens: 300, messages: [{ role: "user", content: prompt }] })
+      body: JSON.stringify({ model: "gpt-5-mini-2025-08-07", max_completion_tokens: 500, messages: [{ role: "user", content: prompt }] })
     });
     const data = await r.json();
     if (!r.ok) return new Response(JSON.stringify({ error: data?.error?.message || "Falha no score" }), { status: 400, headers });
