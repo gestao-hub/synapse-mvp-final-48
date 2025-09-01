@@ -9,10 +9,10 @@ import { useAuthStore } from "@/stores/authStore";
 
 // Default scenario counts for fallback
 const defaultScenarioCounts = {
-  comercial: 10,
+  comercial: 1,
   rh: 10, 
-  educacional: 10,
-  gestao: 10
+  educacional: 1,
+  gestao: 0
 };
 
 const navigationItems = [
