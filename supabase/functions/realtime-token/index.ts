@@ -38,25 +38,17 @@ serve(async (req) => {
         Apresente preocupações válidas mas seja colaborativo com liderança empática.`
     };
 
-    // Priorizar o system_prompt enviado, que já contém as instruções detalhadas
-    const contextualPrompt = system_prompt || `
-IMPORTANTE: Você DEVE falar exclusivamente em PORTUGUÊS BRASILEIRO.
+    // Usar o system_prompt enviado ou construir um otimizado
+    const contextualPrompt = system_prompt || `Você é ${fallbackInstructions[track as keyof typeof fallbackInstructions] || fallbackInstructions.educacional}
 
-${fallbackInstructions[track as keyof typeof fallbackInstructions] || fallbackInstructions.educacional}
+CENÁRIO: ${scenario || 'Simulação profissional'}
 
-NOME DO CENÁRIO: ${scenario || 'Simulação profissional'}
-
-REGRAS ESSENCIAIS:
-- INICIE A CONVERSA IMEDIATAMENTE após conectar (não espere o usuário falar primeiro)
-- Sua primeira fala deve contextualizar o cenário e explicar quem você é
-- Fale APENAS em português brasileiro natural
-- Mantenha respostas curtas e conversacionais (máximo 3 frases)
-- Use expressões brasileiras naturais
-- Termine com perguntas para manter a conversa fluindo
-- Seja realista e desafiador dentro do contexto
-
-IMPORTANTE: FALE PRIMEIRO! Não espere o usuário começar.
-`;
+REGRAS:
+- Fale português brasileiro
+- Inicie a conversa imediatamente
+- Respostas curtas (máx 3 frases)
+- Seja realista e desafiador
+- Termine com perguntas`;
 
     // Request an ephemeral token from OpenAI
     const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
@@ -80,7 +72,8 @@ IMPORTANTE: FALE PRIMEIRO! Não espere o usuário começar.
           prefix_padding_ms: 300,
           silence_duration_ms: 500
         },
-        temperature: 0.8
+        temperature: 0.7,
+        max_response_output_tokens: 200
       }),
     });
 

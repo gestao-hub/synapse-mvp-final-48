@@ -7,11 +7,7 @@ serve(async (req) => {
     const apiKey = Deno.env.get("OPENAI_API_KEY")
     if (!apiKey) return json({ error: "OPENAI_API_KEY ausente" }, 500)
 
-    const system = `IMPORTANTE: Você DEVE falar exclusivamente em PORTUGUÊS BRASILEIRO. Nunca use espanhol, inglês ou qualquer outro idioma.
-
-Você é um colaborador brasileiro no cenário "${scenario}".
-Responda de forma natural e profissional como um colaborador/candidato realista.
-Use linguagem brasileira natural. Limite-se a 3–5 frases.`
+    const system = `Colaborador brasileiro em "${scenario}". Respostas naturais, máx 3 frases.`
     const user = `Transcrição do usuário:\n${transcript}`
 
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -20,7 +16,7 @@ Use linguagem brasileira natural. Limite-se a 3–5 frases.`
       body: JSON.stringify({
         model: "gpt-5-mini-2025-08-07",
         messages: [{ role: "system", content: system }, { role: "user", content: user }],
-        temperature: 0.7,
+        max_completion_tokens: 150,
       }),
     })
     if (!r.ok) return json({ error: await r.text() }, 400)

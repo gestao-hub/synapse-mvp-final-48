@@ -54,31 +54,16 @@ function buildPrompt(area: string, transcript: string) {
   const metricsText = areaMetrics.map(m => `- ${m.label}`).join('\n');
   
   const areaContexts = {
-    'rh': 'Você é um avaliador de RH brasileiro especializado em competências comportamentais e de gestão de pessoas.',
-    'comercial': 'Você é um especialista em vendas brasileiro avaliando competências comerciais e de relacionamento com clientes.',
-    'educacional': 'Você é um especialista em educação brasileiro avaliando competências pedagógicas e de facilitação.',
-    'gestao': 'Você é um especialista em liderança brasileiro avaliando competências executivas e de gestão estratégica.'
+    'rh': 'Avaliador RH brasileiro.',
+    'comercial': 'Especialista vendas brasileiro.',
+    'educacional': 'Especialista educação brasileiro.',
+    'gestao': 'Especialista liderança brasileiro.'
   };
 
-  return `
-IMPORTANTE: Responda SEMPRE em PORTUGUÊS BRASILEIRO. Nunca use espanhol, inglês ou qualquer outro idioma.
-
-${areaContexts[area as keyof typeof areaContexts]}
-
-Avalie o transcript abaixo de 0 a 10 nas seguintes métricas específicas da área ${area}:
+  return `${areaContexts[area as keyof typeof areaContexts]} Avalie 0-10:
 ${metricsText}
-
-Responda APENAS com JSON puro no formato:
-{
-  "metrics": {
-    ${areaMetrics.map(m => `"${m.key}": X`).join(',\n    ')}
-  },
-  "score": X,
-  "observacoes": "Observações específicas em português brasileiro..."
-}
-
-Transcript:
-${transcript}`.trim();
+JSON: {"metrics":{${areaMetrics.map(m => `"${m.key}":X`).join(',')}},"score":X,"observacoes":"..."}
+Transcript: ${transcript}`.trim();
 }
 
 serve(async (req) => {
@@ -96,8 +81,8 @@ serve(async (req) => {
       method: "POST",
       headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        model: "gpt-4-1106-preview", 
-        temperature: 0.2, 
+        model: "gpt-5-mini-2025-08-07", 
+        max_completion_tokens: 300,
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" }
       })

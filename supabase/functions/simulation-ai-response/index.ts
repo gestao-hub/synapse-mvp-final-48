@@ -73,12 +73,12 @@ Responda à última fala do usuário de forma natural e apropriada ao contexto.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4-1106-preview',
+        model: 'gpt-5-mini-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: transcript }
         ],
-        max_tokens: 200,
+        max_completion_tokens: 150,
         temperature: 0.8,
       }),
     });

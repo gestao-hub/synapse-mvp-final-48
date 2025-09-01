@@ -24,24 +24,14 @@ serve(async (req) => {
     const { transcript } = await req.json();
     if (!transcript) return new Response(JSON.stringify({ error: "transcript obrigatório" }), { status: 400, headers });
 
-    const prompt = `
-IMPORTANTE: Responda SEMPRE em PORTUGUÊS BRASILEIRO. Nunca use espanhol, inglês ou qualquer outro idioma.
-
-Você é um avaliador de RH brasileiro. Dado o transcript, avalie de 0 a 10:
-- Comunicação Clara
-- Escuta Ativa
-- Empatia
-- Gestão de Conflitos
-- Plano de Ação
-Responda JSON puro:
-{"metrics":{"comunicacao":X,"escuta":X,"empatia":X,"conflitos":X,"plano":X},"score":X,"observacoes":"..."}
-Transcript:
-${transcript}`.trim();
+    const prompt = `Avaliador RH brasileiro. Avalie 0-10: Comunicação, Escuta Ativa, Empatia, Conflitos, Plano de Ação.
+JSON: {"metrics":{"comunicacao":X,"escuta":X,"empatia":X,"conflitos":X,"plano":X},"score":X,"observacoes":"..."}
+Transcript: ${transcript}`.trim();
 
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "gpt-5-mini-2025-08-07", temperature: 0.2, messages: [{ role: "user", content: prompt }] })
+      body: JSON.stringify({ model: "gpt-5-mini-2025-08-07", max_completion_tokens: 300, messages: [{ role: "user", content: prompt }] })
     });
     const data = await r.json();
     if (!r.ok) return new Response(JSON.stringify({ error: data?.error?.message || "Falha no score" }), { status: 400, headers });
