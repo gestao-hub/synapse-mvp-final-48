@@ -72,36 +72,11 @@ const navigationItems = [
 ];
 
 export function AppSidebar() {
-  const [scenarioCounts, setScenarioCounts] = useState(defaultScenarioCounts);
+  const [scenarioCounts] = useState(defaultScenarioCounts);
   const location = useLocation();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { signOut } = useAuthStore();
-
-  // Load scenario counts from database
-  useEffect(() => {
-    const loadScenarioCounts = async () => {
-      try {
-        for (const area of Object.keys(defaultScenarioCounts)) {
-          const { data, error } = await supabase
-            .from('scenarios')
-            .select('id')
-            .eq('area', area);
-          
-          if (!error && data) {
-            setScenarioCounts(prev => ({
-              ...prev,
-              [area]: data.length || defaultScenarioCounts[area as keyof typeof defaultScenarioCounts]
-            }));
-          }
-        }
-      } catch (error) {
-        console.warn('Erro ao carregar contagem de cenários:', error);
-      }
-    };
-
-    loadScenarioCounts();
-  }, []);
 
   const currentPath = location.pathname;
   
