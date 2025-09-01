@@ -71,8 +71,99 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
       if (error) throw error
       setSessionId(session.id)
 
-      // Iniciar full duplex com contexto do cenário
-      const systemPrompt = `${scenario.persona}\nContexto: ${scenario.context}\nPapel do usuário: ${userRole}\nCritérios de avaliação: ${scenario.criteria?.map(c => c.label).join(', ')}`
+      // Construir prompt baseado no papel escolhido pelo usuário
+      const buildSystemPrompt = () => {
+        // Se o usuário escolheu um papel específico, a IA assume o papel complementar
+        const roleMapping = {
+          // Cenários de feedback/avaliação
+          'Gestor': {
+            aiRole: 'colaborador',
+            persona: 'Você é um colaborador brasileiro que recebe feedback. Seja inicialmente defensivo mas aberto ao diálogo.',
+            context: `O usuário é seu gestor. ${scenario.context || ''}`
+          },
+          'Colaborador': {
+            aiRole: 'gestor', 
+            persona: 'Você é um gestor brasileiro dando feedback. Seja empático, use exemplos concretos e foque em desenvolvimento.',
+            context: `O usuário é um colaborador da sua equipe. ${scenario.context || ''}`
+          },
+          // Cenários de entrevista
+          'Recrutador': {
+            aiRole: 'candidato',
+            persona: 'Você é um candidato brasileiro em entrevista. Demonstre experiência relevante mas tenha algumas limitações realistas.',
+            context: `O usuário é o recrutador. ${scenario.context || ''}`
+          },
+          'Candidato': {
+            aiRole: 'recrutador',
+            persona: 'Você é um recrutador brasileiro conduzindo entrevista. Faça perguntas técnicas e comportamentais específicas.',
+            context: `O usuário é o candidato. ${scenario.context || ''}`
+          },
+          'Entrevistador': {
+            aiRole: 'candidato',
+            persona: 'Você é um candidato brasileiro. Responda de forma competente mas tenha pontos a desenvolver.',
+            context: `O usuário é o entrevistador. ${scenario.context || ''}`
+          },
+          // Cenários de RH específicos
+          'RH': {
+            aiRole: 'colaborador',
+            persona: 'Você é um colaborador brasileiro. Demonstre as reações naturais ao contexto da situação.',
+            context: `O usuário é do RH. ${scenario.context || ''}`
+          },
+           // Cenários de mediação
+          'Mediador': {
+            aiRole: 'colaborador_conflito',
+            persona: 'Você representa colaboradores em conflito. Apresente diferentes perspectivas de forma realista.',
+            context: `O usuário é o mediador. ${scenario.context || ''}`
+          },
+          // Papéis adicionais
+          'Avaliador': {
+            aiRole: 'avaliado',
+            persona: 'Você é um colaborador sendo avaliado. Demonstre receptividade mas também defenda seus pontos de vista.',
+            context: `O usuário é seu avaliador. ${scenario.context || ''}`
+          },
+          'Avaliado': {
+            aiRole: 'avaliador', 
+            persona: 'Você é um gestor conduzindo avaliação. Seja justo, específico e focado no desenvolvimento.',
+            context: `O usuário está sendo avaliado. ${scenario.context || ''}`
+          },
+          'Promovido': {
+            aiRole: 'gestor',
+            persona: 'Você é um gestor comunicando promoção. Seja motivacional e clarifique expectativas.',
+            context: `O usuário foi promovido. ${scenario.context || ''}`
+          },
+          'Novo Colaborador': {
+            aiRole: 'rh_gestor',
+            persona: 'Você é do RH/Gestão fazendo onboarding. Seja acolhedor e informativo.',
+            context: `O usuário é novo na empresa. ${scenario.context || ''}`
+          }
+        }
+
+        // Verificar se o cenário tem um system_prompt específico (como Blue Ocean)
+        if (scenario.system_prompt || (scenario.persona && typeof scenario.persona === 'object' && scenario.persona.system_prompt)) {
+          const customPrompt = scenario.system_prompt || scenario.persona.system_prompt
+          return `${customPrompt}
+
+PAPEL DO USUÁRIO: ${userRole}
+CRITÉRIOS: ${scenario.criteria?.map(c => c.label).join(', ')}`
+        }
+
+        const roleConfig = roleMapping[userRole] || {
+          aiRole: 'default',
+          persona: scenario.persona || 'Você é um profissional brasileiro na simulação.',
+          context: scenario.context || ''
+        }
+
+        return `${roleConfig.persona}
+
+CONTEXTO: ${roleConfig.context}
+CENÁRIO: ${scenario.title}
+SEU PAPEL: ${roleConfig.aiRole} 
+PAPEL DO USUÁRIO: ${userRole}
+CRITÉRIOS DE AVALIAÇÃO: ${scenario.criteria?.map(c => c.label).join(', ')}
+
+IMPORTANTE: Inicie a conversa proativamente baseado no seu papel.`
+      }
+
+      const systemPrompt = buildSystemPrompt()
       
       await startCall({
         track: scenario.area as "rh" | "comercial" | "educacional" | "gestao",
