@@ -86,7 +86,7 @@ Seja específico, construtivo e baseie-se nas evidências da conversa.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-4-1106-preview',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: 'Analise a simulação e forneça o feedback estruturado conforme solicitado.' }

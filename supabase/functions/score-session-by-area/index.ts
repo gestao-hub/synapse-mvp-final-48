@@ -96,9 +96,10 @@ serve(async (req) => {
       method: "POST",
       headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        model: "gpt-5-mini-2025-08-07", 
+        model: "gpt-4-1106-preview", 
         temperature: 0.2, 
-        messages: [{ role: "user", content: prompt }] 
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" }
       })
     });
     

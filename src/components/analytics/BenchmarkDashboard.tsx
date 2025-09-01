@@ -17,10 +17,10 @@ interface BenchmarkDashboardProps {
 
 export function BenchmarkDashboard({ data, area }: BenchmarkDashboardProps) {
   const getPerformanceLevel = (percentile: number) => {
-    if (percentile >= 90) return { label: 'Top 10%', color: 'text-green-500' }
-    if (percentile >= 75) return { label: 'Top 25%', color: 'text-blue-500' }
-    if (percentile >= 50) return { label: 'Acima da Média', color: 'text-orange-500' }
-    return { label: 'Abaixo da Média', color: 'text-red-500' }
+    if (percentile >= 90) return { label: 'Top 10%', color: 'text-success' }
+    if (percentile >= 75) return { label: 'Top 25%', color: 'text-primary' }
+    if (percentile >= 50) return { label: 'Acima da Média', color: 'text-warning' }
+    return { label: 'Abaixo da Média', color: 'text-destructive' }
   }
 
   const performance = getPerformanceLevel(data.percentile)
@@ -54,8 +54,8 @@ export function BenchmarkDashboard({ data, area }: BenchmarkDashboardProps) {
 
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-yellow-500/10 rounded-lg">
-              <Award className="h-5 w-5 text-yellow-500" />
+            <div className="p-2 bg-warning/10 rounded-lg">
+              <Award className="h-5 w-5 text-warning" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Top Performers</p>
@@ -66,12 +66,12 @@ export function BenchmarkDashboard({ data, area }: BenchmarkDashboardProps) {
 
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-500/10 rounded-lg">
-              <TrendingUp className="h-5 w-5 text-green-500" />
+            <div className="p-2 bg-success/10 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Melhoria (30d)</p>
-              <p className="text-2xl font-bold text-green-500">+{data.improvement}%</p>
+              <p className="text-2xl font-bold text-success">+{data.improvement}%</p>
             </div>
           </div>
         </Card>

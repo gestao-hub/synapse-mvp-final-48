@@ -9,6 +9,7 @@ import { TrendAnalysis } from '@/components/analytics/TrendAnalysis'
 import { DataExporter } from '@/components/export/DataExporter'
 import { OnboardingTour, useOnboarding } from '@/components/onboarding/OnboardingTour'
 import { useDashboardData } from '@/hooks/useDashboardData'
+import { MetricsTestComponent } from '@/components/analytics/MetricsTestComponent'
 
 export default function DashboardPage() {
   const { kpis, chartData, recentSessions, isLoading } = useDashboardData()
@@ -65,6 +66,11 @@ export default function DashboardPage() {
             </ErrorBoundary>
           </div>
         </div>
+
+        {/* Componente de Teste de Métricas - Temporário */}
+        <ErrorBoundary>
+          <MetricsTestComponent />
+        </ErrorBoundary>
       </div>
       
       <OnboardingTour isOpen={showOnboarding} onClose={closeOnboarding} />

@@ -81,7 +81,7 @@ export async function calculateRealMetrics(area: string, userId?: string): Promi
     
     const scores = completedSessions.map(s => {
       const metadata = s.metadata as any
-      return metadata?.overall_score
+      return s.score_overall || metadata?.overall_score || metadata?.analyzed_score
     }).filter(Boolean)
     
     const yourScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0
@@ -90,7 +90,7 @@ export async function calculateRealMetrics(area: string, userId?: string): Promi
     // 4. Calcular métricas comparativas
     const allScores = allSessions?.map(s => {
       const metadata = s.metadata as any
-      return metadata?.overall_score
+      return (s as any).score_overall || metadata?.overall_score || metadata?.analyzed_score
     }).filter(Boolean) || []
     const industryAverage = allScores.length > 0 ? allScores.reduce((a, b) => a + b, 0) / allScores.length : 6.5
     const topPerformers = allScores.length > 0 ? Math.max(...allScores) * 0.95 : 9.0

@@ -34,6 +34,7 @@ export function useSessionScoring() {
 
       // Atualizar sessão com o score analisado
       const updateData = {
+        score_overall: data.score,
         metadata: {
           analyzed_score: data.score,
           analysis_metrics: data.metrics || {},
