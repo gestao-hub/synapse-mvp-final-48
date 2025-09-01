@@ -227,15 +227,32 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
   }
 
   const speechToText = async (audioBlob: Blob): Promise<string> => {
-    const formData = new FormData()
-    formData.append('audio', audioBlob, 'audio.webm')
-    
-    const { data, error } = await supabase.functions.invoke('openai-stt', {
-      body: formData
-    })
-    
-    if (error) throw error
-    return data.text
+    try {
+      console.log('🎤 Enviando áudio para transcrição:', audioBlob.size, 'bytes')
+      
+      const formData = new FormData()
+      formData.append('audio', audioBlob, 'audio.webm')
+      
+      const { data, error } = await supabase.functions.invoke('openai-stt', {
+        body: formData
+      })
+      
+      if (error) {
+        console.error('❌ Erro na Edge Function STT:', error)
+        throw error
+      }
+      
+      console.log('✅ Transcrição recebida:', data?.text)
+      return data?.text || ''
+    } catch (error) {
+      console.error('❌ Erro completo na transcrição:', error)
+      toast({
+        title: "Erro na transcrição",
+        description: "Não foi possível converter sua fala em texto. Tente novamente.",
+        variant: "destructive"
+      })
+      throw error
+    }
   }
 
   const textToSpeech = async (text: string): Promise<string> => {
@@ -299,8 +316,15 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
 
   const saveConversationTurn = async (userMsg: ConversationMessage, aiMsg: ConversationMessage, scores: SimulationScores) => {
     try {
+      console.log('💾 Salvando turnos da conversa:', {
+        sessionId,
+        turnCount,
+        userContent: userMsg.content,
+        aiContent: aiMsg.content
+      })
+      
       // Salvar turnos na tabela sessions_live_turns
-      await supabase.from('sessions_live_turns').insert([
+      const { error } = await supabase.from('sessions_live_turns').insert([
         {
           session_id: sessionId,
           turn_index: turnCount,
@@ -316,8 +340,55 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
           timestamp_ms: new Date(aiMsg.timestamp).getTime()
         }
       ])
+      
+      if (error) {
+        console.error('❌ Erro ao salvar turnos:', error)
+      } else {
+        console.log('✅ Turnos salvos com sucesso')
+      }
+      
+      // Atualizar imediatamente os transcripts na sessão principal
+      await updateSessionTranscripts()
+      
     } catch (error) {
-      console.error('Erro ao salvar conversa:', error)
+      console.error('❌ Erro ao salvar conversa:', error)
+    }
+  }
+  
+  const updateSessionTranscripts = async () => {
+    try {
+      const userTranscript = conversation
+        .filter(msg => msg.role === 'user')
+        .map(msg => msg.content)
+        .join('\n')
+      
+      const aiTranscript = conversation
+        .filter(msg => msg.role === 'assistant')
+        .map(msg => msg.content)
+        .join('\n')
+      
+      console.log('📝 Atualizando transcripts da sessão:', {
+        sessionId,
+        userLines: userTranscript.split('\n').length,
+        aiLines: aiTranscript.split('\n').length
+      })
+      
+      const { error } = await supabase
+        .from('sessions_live')
+        .update({
+          transcript_user: userTranscript || null,
+          transcript_ai: aiTranscript || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', sessionId)
+        
+      if (error) {
+        console.error('❌ Erro ao atualizar transcripts:', error)
+      } else {
+        console.log('✅ Transcripts atualizados com sucesso')
+      }
+    } catch (error) {
+      console.error('❌ Erro ao atualizar transcripts:', error)
     }
   }
 
@@ -368,15 +439,25 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
         .map(msg => msg.content)
         .join('\n')
 
-      // Atualizar sessão live com transcripts reais
-      await supabase
+      console.log('🏁 Finalizando sessão com transcripts:', {
+        sessionId,
+        userTranscriptLength: userTranscript.length,
+        aiTranscriptLength: aiTranscript.length,
+        totalTurns: turnCount
+      })
+      
+      // Atualizar sessão live com transcripts reais e marcar como completa
+      const { error: updateError } = await supabase
         .from('sessions_live')
         .update({
           duration_ms: Date.now() - (conversation[0] ? new Date(conversation[0].timestamp).getTime() : Date.now()),
-          transcript_user: userTranscript || 'Sem fala do usuário registrada',
-          transcript_ai: aiTranscript || 'Sem resposta da IA registrada',
+          transcript_user: userTranscript || null,
+          transcript_ai: aiTranscript || null,
+          completed_at: new Date().toISOString(),
           metadata: {
-            ...conversation[0] ? { scenario_title: scenario.title } : {},
+            scenario_title: scenario.title,
+            scenario_id: scenario.id,
+            user_role: userRole,
             overall_score: currentScores?.overallScore || 0,
             total_turns: turnCount,
             completed: true,
@@ -385,6 +466,12 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
           }
         })
         .eq('id', sessionId)
+        
+      if (updateError) {
+        console.error('❌ Erro ao finalizar sessão:', updateError)
+      } else {
+        console.log('✅ Sessão finalizada com sucesso')
+      }
 
       // Chamar análise da sessão de forma assíncrona
       if (userTranscript && userTranscript.trim().length > 0) {

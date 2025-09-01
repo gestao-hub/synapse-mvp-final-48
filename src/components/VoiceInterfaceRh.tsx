@@ -53,19 +53,19 @@ export default function VoiceInterfaceRh() {
       const fd = new FormData();
       fd.append("audio", blob, "user.webm");
 
-      let res = await fetch("/functions/v1/rh-voice-turn", { method: "POST", body: fd });
-      if (!res.ok) {
-        res = await fetch("https://roboonbdessuipvcpgve.supabase.co/functions/v1/rh-voice-turn", {
-          method: "POST",
-          headers: {
-            "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: fd
-        });
+      console.log('🎤 Enviando áudio para processamento:', blob.size, 'bytes')
+      
+      const { data, error } = await supabase.functions.invoke('rh-voice-turn', {
+        body: fd
+      })
+      
+      if (error) {
+        console.error('❌ Erro na Edge Function:', error)
+        throw error
       }
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Falha no turno de voz");
+      
+      const json = data
+      console.log('✅ Resposta recebida:', json)
 
       const userText = json.transcript || "";
       const botText  = json.assistantText || "";
@@ -96,12 +96,11 @@ export default function VoiceInterfaceRh() {
       const sid = await ensureSession();
       const transcript = turns.map(t => `Você: ${t.user}\nIA: ${t.bot}`).join("\n");
 
-      const r = await fetch("/functions/v1/rh-score-session", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transcript })
-      });
-      const scored = await r.json();
-      if (!r.ok) throw new Error(scored?.error || "Falha no score");
+      const { data: scored, error: scoreError } = await supabase.functions.invoke('rh-score-session', {
+        body: { transcript }
+      })
+      
+      if (scoreError) throw new Error(scoreError.message || "Falha no score")
 
       await supabase.from("sessions").update({
         finished_at: new Date().toISOString(),

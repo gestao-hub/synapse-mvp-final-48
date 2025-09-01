@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 type StartOpts = { 
   track: "rh" | "comercial" | "educacional" | "gestao"; 
@@ -11,8 +12,12 @@ export function useRealtimeCall() {
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const remoteAudioRef = useRef<HTMLAudioElement | null>(null);
+  const dataChannelRef = useRef<RTCDataChannel | null>(null);
   const [status, setStatus] = useState<"idle"|"connecting"|"connected"|"ended">("idle");
   const [muted, setMuted] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [userTranscript, setUserTranscript] = useState("");
+  const [aiTranscript, setAiTranscript] = useState("");
 
   useEffect(() => {
     // cria <audio> invisível para tocar o lado remoto
@@ -24,11 +29,66 @@ export function useRealtimeCall() {
     return () => { el.remove(); };
   }, []);
 
+  // Função para salvar transcrições em tempo real
+  const saveTranscript = async (text: string, speaker: 'user' | 'ai') => {
+    if (!currentSessionId) return;
+    
+    try {
+      await supabase.functions.invoke('save-live-transcript', {
+        body: {
+          sessionId: currentSessionId,
+          [speaker === 'user' ? 'userTranscript' : 'aiTranscript']: text,
+          turnIndex: Date.now(),
+          speakerType: speaker
+        }
+      });
+      
+      // Atualizar estado local
+      if (speaker === 'user') {
+        setUserTranscript(prev => prev + (prev ? '\n' : '') + text);
+      } else {
+        setAiTranscript(prev => prev + (prev ? '\n' : '') + text);
+      }
+      
+      console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50));
+    } catch (error) {
+      console.error(`❌ Erro ao salvar transcript ${speaker}:`, error);
+    }
+  };
+
   async function startCall({ track, scenario, systemPrompt, voiceId }: StartOpts) {
     try {
       setStatus("connecting");
       console.log("=== INICIANDO CHAMADA ===");
       console.log("Parâmetros:", { track, scenario, systemPrompt, voiceId });
+      
+      // Criar nova sessão no banco
+      const sessionId = crypto.randomUUID();
+      setCurrentSessionId(sessionId);
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { error: sessionError } = await supabase
+        .from('sessions_live')
+        .insert({
+          id: sessionId,
+          track: track,
+          user_id: user?.id,
+          duration_ms: 0,
+          metadata: {
+            scenario_title: scenario || 'Simulação Live',
+            system_prompt: systemPrompt,
+            voice_id: voiceId,
+            started_at: new Date().toISOString()
+          }
+        });
+        
+      if (sessionError) {
+        console.error('❌ Erro ao criar sessão:', sessionError);
+        throw sessionError;
+      }
+      
+      console.log('✅ Sessão criada:', sessionId);
       
       // 1) token efêmero - usando nova edge function
       console.log("Fazendo requisição para token...");
@@ -90,8 +150,51 @@ export function useRealtimeCall() {
       stream.getAudioTracks().forEach(track => pc.addTrack(track, stream));
       console.log("Track local adicionado");
 
-      // 4) datachannel opcional (no futuro p/ eventos)
-      pc.createDataChannel("oai-events");
+      // 4) datachannel para capturar eventos e transcrições
+      const dataChannel = pc.createDataChannel("oai-events");
+      dataChannelRef.current = dataChannel;
+      
+      dataChannel.addEventListener("open", () => {
+        console.log("✅ DataChannel aberto - pronto para receber transcrições");
+      });
+      
+      dataChannel.addEventListener("message", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log("📡 Evento recebido:", data.type);
+          
+          // Capturar transcrições em tempo real
+          if (data.type === 'input_audio_buffer.speech_started') {
+            console.log("🎤 Usuário começou a falar");
+          }
+          
+          if (data.type === 'input_audio_buffer.speech_stopped') {
+            console.log("🎤 Usuário parou de falar");
+          }
+          
+          if (data.type === 'conversation.item.input_audio_transcription.completed') {
+            console.log("📝 Transcrição do usuário:", data.transcript);
+            saveTranscript(data.transcript, 'user');
+          }
+          
+          if (data.type === 'response.audio_transcript.delta') {
+            console.log("📝 Delta da IA:", data.delta);
+            // Acumular deltas da IA
+            setAiTranscript(prev => prev + data.delta);
+          }
+          
+          if (data.type === 'response.audio_transcript.done') {
+            console.log("📝 Transcrição da IA completa");
+            // Salvar a transcrição completa da IA quando finalizada
+            if (aiTranscript.trim()) {
+              saveTranscript(aiTranscript, 'ai');
+            }
+          }
+          
+        } catch (error) {
+          console.error("❌ Erro ao processar evento:", error);
+        }
+      });
 
       // 5) negocia SDP via fetch (WebRTC com OpenAI)
       console.log("Criando oferta SDP...");
@@ -124,16 +227,12 @@ export function useRealtimeCall() {
 
       setStatus("connected");
       
-      // Aguardar 2 segundos e forçar primeira mensagem da IA se ela não falar
+      // Aguardar conexão estabelecer e configurar eventos
       setTimeout(() => {
-        console.log("Verificando se IA iniciou conversa automaticamente...");
-        // Se ainda não recebeu áudio da IA, força primeira mensagem
-        if (status === "connected") {
-          console.log("Forçando IA a iniciar conversa...");
-          // Enviar um sinal silencioso para ativar a IA (se necessário)
-          // A IA deveria iniciar automaticamente com as instruções atualizadas
-        }
-      }, 2000);
+        console.log("✅ Conexão WebRTC totalmente estabelecida");
+        console.log("🎤 Captura de transcrições ativada para sessão:", sessionId);
+        // A IA deveria iniciar automaticamente com as instruções do realtime-token
+      }, 1000);
     } catch (error) {
       console.error("=== ERRO DETALHADO ===");
       console.error("Tipo do erro:", error);
@@ -169,8 +268,43 @@ export function useRealtimeCall() {
     });
   }
 
-  function endCall() {
+  async function endCall() {
+    console.log("🏁 Finalizando chamada e salvando dados finais...");
+    
+    // Finalizar a sessão no banco antes de fechar conexões
+    if (currentSessionId) {
+      try {
+        const startTime = Date.now() - 300000; // Estimativa de 5 minutos atrás
+        
+        const { error: finalizeError } = await supabase
+          .from('sessions_live')
+          .update({
+            completed_at: new Date().toISOString(),
+            duration_ms: Date.now() - startTime, // Duração estimada
+            transcript_user: userTranscript || null,
+            transcript_ai: aiTranscript || null,
+            metadata: {
+              completed: true,
+              final_user_transcript: userTranscript,
+              final_ai_transcript: aiTranscript,
+              total_interactions: (userTranscript.split('\n').length + aiTranscript.split('\n').length)
+            }
+          })
+          .eq('id', currentSessionId);
+          
+        if (finalizeError) {
+          console.error('❌ Erro ao finalizar sessão:', finalizeError);
+        } else {
+          console.log('✅ Sessão finalizada com sucesso:', currentSessionId);
+        }
+      } catch (error) {
+        console.error('❌ Erro ao salvar dados finais:', error);
+      }
+    }
+    
     setStatus("ended");
+    
+    // Fechar conexões
     const pc = pcRef.current;
     pc?.getSenders().forEach(s => s.track && s.track.stop());
     pc?.close();
@@ -183,6 +317,12 @@ export function useRealtimeCall() {
     if (remoteAudioRef.current) {
       (remoteAudioRef.current as any).srcObject = null;
     }
+    
+    // Limpar estado
+    dataChannelRef.current = null;
+    setCurrentSessionId(null);
+    setUserTranscript("");
+    setAiTranscript("");
   }
 
   return { 
@@ -192,6 +332,9 @@ export function useRealtimeCall() {
     muted, 
     status,
     remoteAudioElement: remoteAudioRef.current,
-    localStream: localStreamRef.current
+    localStream: localStreamRef.current,
+    currentSessionId,
+    userTranscript,
+    aiTranscript
   };
 }
