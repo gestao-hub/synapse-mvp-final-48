@@ -9,7 +9,7 @@ import { TrendAnalysis } from '@/components/analytics/TrendAnalysis'
 import { DataExporter } from '@/components/export/DataExporter'
 import { OnboardingTour, useOnboarding } from '@/components/onboarding/OnboardingTour'
 import { useDashboardData } from '@/hooks/useDashboardData'
-import { TranscriptionTestComponent } from '@/components/analytics/TranscriptionTestComponent'
+
 
 export default function DashboardPage() {
   const { kpis, chartData, recentSessions, isLoading } = useDashboardData()
@@ -67,10 +67,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Componente de Teste de Transcrição - Temporário */}
-        <ErrorBoundary>
-          <TranscriptionTestComponent />
-        </ErrorBoundary>
       </div>
       
       <OnboardingTour isOpen={showOnboarding} onClose={closeOnboarding} />
