@@ -14,26 +14,26 @@ const navigationItems = [{
   title: "Comercial",
   url: "/app/comercial",
   icon: TrendingUp,
-  description: "8 cenários de vendas",
-  fullDescription: "8 cenários especializados em vendas consultivas, negociação e relacionamento comercial"
+  description: "10 cenários de vendas",
+  fullDescription: "10 cenários especializados em vendas consultivas, negociação e relacionamento comercial"
 }, {
   title: "RH",
   url: "/app/rh",
   icon: Users,
-  description: "8 cenários de RH",
-  fullDescription: "8 cenários de recursos humanos incluindo entrevistas, feedbacks e gestão de pessoas"
+  description: "10 cenários de RH",
+  fullDescription: "10 cenários de recursos humanos incluindo entrevistas, feedbacks e gestão de pessoas"
 }, {
   title: "Educacional",
   url: "/app/educacional",
   icon: GraduationCap,
-  description: "8 cenários de ensino",
-  fullDescription: "8 cenários educacionais para desenvolvimento de habilidades didáticas e pedagógicas"
+  description: "10 cenários de ensino",
+  fullDescription: "10 cenários educacionais para desenvolvimento de habilidades didáticas e pedagógicas"
 }, {
   title: "Gestão",
   url: "/app/gestao",
   icon: Building2,
-  description: "8 cenários de liderança",
-  fullDescription: "8 cenários de gestão estratégica focados em liderança executiva e tomada de decisão"
+  description: "10 cenários de liderança",
+  fullDescription: "10 cenários de gestão estratégica focados em liderança executiva e tomada de decisão"
 }, {
   title: "Uploads",
   url: "/app/uploads",
