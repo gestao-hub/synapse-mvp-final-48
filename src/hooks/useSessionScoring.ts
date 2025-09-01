@@ -1,6 +1,41 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// Função para obter métricas por área (similar à do edge function)
+function getMetricsByArea(area: string) {
+  const metrics = {
+    'rh': [
+      { key: 'comunicacao_clara', label: 'Comunicação Clara' },
+      { key: 'escuta_ativa', label: 'Escuta Ativa' },
+      { key: 'empatia', label: 'Empatia' },
+      { key: 'gestao_conflitos', label: 'Gestão de Conflitos' },
+      { key: 'plano_acao', label: 'Plano de Ação' }
+    ],
+    'comercial': [
+      { key: 'tecnicas_venda', label: 'Técnicas de Venda' },
+      { key: 'relacionamento_cliente', label: 'Relacionamento Cliente' },
+      { key: 'negociacao', label: 'Negociação' },
+      { key: 'prospeccao', label: 'Prospecção' },
+      { key: 'fechamento', label: 'Fechamento' }
+    ],
+    'educacional': [
+      { key: 'clareza_didatica', label: 'Clareza Didática' },
+      { key: 'engajamento', label: 'Engajamento' },
+      { key: 'adaptabilidade', label: 'Adaptabilidade' },
+      { key: 'feedback_construtivo', label: 'Feedback Construtivo' },
+      { key: 'motivacao', label: 'Motivação' }
+    ],
+    'gestao': [
+      { key: 'lideranca_estrategica', label: 'Liderança Estratégica' },
+      { key: 'comunicacao_executiva', label: 'Comunicação Executiva' },
+      { key: 'tomada_decisao', label: 'Tomada de Decisão' },
+      { key: 'influencia_persuasao', label: 'Influência e Persuasão' },
+      { key: 'gestao_conflitos', label: 'Gestão de Conflitos' }
+    ]
+  };
+  return metrics[area as keyof typeof metrics] || [];
+}
+
 export function useSessionScoring() {
   const { toast } = useToast();
 
@@ -49,6 +84,29 @@ export function useSessionScoring() {
           .from('sessions_live')
           .update(updateData)
           .eq('id', sessionId);
+
+        // Salvar métricas detalhadas na tabela sessions_live_metrics
+        if (data.metrics && typeof data.metrics === 'object') {
+          const metricsEntries = Object.entries(data.metrics);
+          console.log(`📊 Salvando ${metricsEntries.length} métricas para sessão ${sessionId}`);
+
+          for (const [criterionKey, score] of metricsEntries) {
+            // Buscar o label do critério
+            const areaMetrics = getMetricsByArea(area);
+            const criterionInfo = areaMetrics.find(m => m.key === criterionKey);
+            
+            await supabase
+              .from('sessions_live_metrics')
+              .insert({
+                session_id: sessionId,
+                criterion_key: criterionKey,
+                criterion_label: criterionInfo?.label || criterionKey,
+                score: typeof score === 'number' ? Math.round(score) : 0,
+                weight: 1,
+                feedback: data.observacoes || null
+              });
+          }
+        }
       } else {
         await supabase
           .from('sessions')

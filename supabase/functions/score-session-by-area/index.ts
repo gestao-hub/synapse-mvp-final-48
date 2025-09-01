@@ -98,6 +98,15 @@ serve(async (req) => {
       parsed = {}; 
     }
     
+    // Log detalhado da resposta para debug
+    console.log("✅ Análise concluída:", {
+      area,
+      score: parsed.score,
+      metrics: parsed.metrics,
+      observacoes: parsed.observacoes,
+      rawResponse: data.choices?.[0]?.message?.content
+    });
+    
     return new Response(JSON.stringify(parsed), { status: 200, headers });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e?.message || "Erro interno" }), { status: 500, headers });
