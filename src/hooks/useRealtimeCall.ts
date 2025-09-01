@@ -174,10 +174,19 @@ export function useRealtimeCall() {
             console.log("🎤 Usuário parou de falar");
           }
           
-          // Eventos de transcrição do usuário
+          // Eventos de transcrição do usuário - MÚLTIPLOS TIPOS POSSÍVEIS
           if (data.type === 'conversation.item.input_audio_transcription.completed') {
-            console.log("📝 Transcrição do usuário completa:", data.transcript);
-            saveTranscript(data.transcript, 'user');
+            console.log("📝 Transcrição do usuário completa (completed):", data.transcript);
+            if (data.transcript?.trim()) {
+              saveTranscript(data.transcript, 'user');
+            }
+          }
+          
+          if (data.type === 'input_audio_transcription.completed') {
+            console.log("📝 Transcrição do usuário completa (input):", data.transcript);
+            if (data.transcript?.trim()) {
+              saveTranscript(data.transcript, 'user');
+            }
           }
           
           if (data.type === 'conversation.item.input_audio_transcription.failed') {
@@ -199,13 +208,17 @@ export function useRealtimeCall() {
             }
           }
           
-          // Logs adicionais para debug
-          if (data.type.includes('transcript') || data.type.includes('audio')) {
-            console.log("🔍 Evento de áudio/transcript:", {
+          // Logs expandidos para debug de eventos de transcrição
+          if (data.type.includes('transcript') || 
+              data.type.includes('audio') || 
+              data.type.includes('input_audio') ||
+              data.type.includes('conversation.item')) {
+            console.log("🔍 Evento detalhado:", {
               type: data.type,
               transcript: data.transcript,
               delta: data.delta,
-              content: data.content
+              content: data.content,
+              fullEvent: data
             });
           }
           
