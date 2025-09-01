@@ -22,57 +22,29 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    // Contextos específicos por track com mensagens iniciais
-    const trackInstructions = {
-      comercial: `Você é um cliente brasileiro interessado mas cético em uma simulação de vendas. 
-        
-        SEMPRE INICIE A CONVERSA COM: "Olá! Estamos aqui para a [nome do cenário]. Sou [sua persona específica]. Como você pode me ajudar?"
-        
-        Depois:
-        - Faça perguntas sobre soluções e preços
-        - Demonstre objeções realistas de valor
-        - Seja educado mas direto sobre suas necessidades
-        - Teste a capacidade do vendedor de descobrir suas dores`,
+    // Usar o system_prompt enviado diretamente, que já contém as instruções específicas
+    // Se não houver system_prompt, usar instruções básicas por track
+    const fallbackInstructions = {
+      comercial: `Você é um cliente brasileiro interessado em uma simulação de vendas.
+        Seja educado mas apresente objeções realistas e teste o vendedor.`,
       
-      rh: `Você é um colaborador brasileiro em uma simulação de RH/feedback. 
-        
-        SEMPRE INICIE A CONVERSA COM: "Oi! Vim para nossa conversa sobre [cenário específico]. O que precisamos discutir?"
-        
-        Depois:
-        - Seja inicialmente um pouco defensivo mas aberto ao diálogo
-        - Responda às técnicas de comunicação não-violenta
-        - Faça perguntas sobre desenvolvimento`,
+      rh: `Você é um colaborador brasileiro em uma simulação de RH.
+        Seja inicialmente defensivo mas aberto ao diálogo e desenvolvimento.`,
       
-      educacional: `Você é um aluno brasileiro em uma simulação educacional. 
-        
-        SEMPRE INICIE A CONVERSA COM: "Oi professor! Estamos na aula sobre [cenário]. Pode me explicar melhor?"
-        
-        Depois:
-        - Demonstre curiosidade ou dificuldades iniciais
-        - Faça perguntas quando não entender
-        - Responda positivamente a técnicas pedagógicas efetivas`,
+      educacional: `Você é um aluno brasileiro em uma simulação educacional.
+        Demonstre curiosidade ou dificuldades e responda positivamente a boas técnicas pedagógicas.`,
       
-      gestao: `Você é um membro da equipe brasileiro em uma simulação de gestão. 
-        
-        SEMPRE INICIE A CONVERSA COM: "Oi! Recebi que precisamos conversar sobre [cenário]. O que está acontecendo?"
-        
-        Depois:
-        - Apresente preocupações válidas sobre mudanças
-        - Questione decisões quando necessário
-        - Seja colaborativo quando o líder demonstrar empatia`
+      gestao: `Você é um membro da equipe brasileiro em uma simulação de gestão.
+        Apresente preocupações válidas mas seja colaborativo com liderança empática.`
     };
 
-    const baseInstruction = trackInstructions[track as keyof typeof trackInstructions] || trackInstructions.educacional;
-    
-    const contextualPrompt = `
+    // Priorizar o system_prompt enviado, que já contém as instruções detalhadas
+    const contextualPrompt = system_prompt || `
 IMPORTANTE: Você DEVE falar exclusivamente em PORTUGUÊS BRASILEIRO.
 
-${baseInstruction}
+${fallbackInstructions[track as keyof typeof fallbackInstructions] || fallbackInstructions.educacional}
 
-CONTEXTO ESPECÍFICO DO CENÁRIO:
-${system_prompt || 'Simulação profissional geral'}
-
-NOME DO CENÁRIO: ${scenario || 'Conversa profissional'}
+NOME DO CENÁRIO: ${scenario || 'Simulação profissional'}
 
 REGRAS ESSENCIAIS:
 - INICIE A CONVERSA IMEDIATAMENTE após conectar (não espere o usuário falar primeiro)
@@ -80,11 +52,10 @@ REGRAS ESSENCIAIS:
 - Fale APENAS em português brasileiro natural
 - Mantenha respostas curtas e conversacionais (máximo 3 frases)
 - Use expressões brasileiras naturais
-- Adapte-se completamente ao contexto específico fornecido
 - Termine com perguntas para manter a conversa fluindo
 - Seja realista e desafiador dentro do contexto
 
-IMPORTANTE: FALE PRIMEIRO! Não espere o usuário começar. Sua primeira mensagem DEVE sempre contextualizar o cenário.
+IMPORTANTE: FALE PRIMEIRO! Não espere o usuário começar.
 `;
 
     // Request an ephemeral token from OpenAI
