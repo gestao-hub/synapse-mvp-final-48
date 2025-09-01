@@ -158,10 +158,12 @@ export function useRealtimeCall() {
         console.log("✅ DataChannel aberto - pronto para receber transcrições");
       });
       
+      let currentAiTranscript = '';
+      
       dataChannel.addEventListener("message", (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log("📡 Evento recebido:", data.type);
+          console.log("📡 Evento recebido:", data.type, data);
           
           // Capturar transcrições em tempo real
           if (data.type === 'input_audio_buffer.speech_started') {
@@ -172,23 +174,39 @@ export function useRealtimeCall() {
             console.log("🎤 Usuário parou de falar");
           }
           
+          // Eventos de transcrição do usuário
           if (data.type === 'conversation.item.input_audio_transcription.completed') {
-            console.log("📝 Transcrição do usuário:", data.transcript);
+            console.log("📝 Transcrição do usuário completa:", data.transcript);
             saveTranscript(data.transcript, 'user');
           }
           
+          if (data.type === 'conversation.item.input_audio_transcription.failed') {
+            console.error("❌ Falha na transcrição do usuário:", data.error);
+          }
+          
+          // Eventos de transcrição da IA
           if (data.type === 'response.audio_transcript.delta') {
             console.log("📝 Delta da IA:", data.delta);
-            // Acumular deltas da IA
+            currentAiTranscript += data.delta;
             setAiTranscript(prev => prev + data.delta);
           }
           
           if (data.type === 'response.audio_transcript.done') {
-            console.log("📝 Transcrição da IA completa");
-            // Salvar a transcrição completa da IA quando finalizada
-            if (aiTranscript.trim()) {
-              saveTranscript(aiTranscript, 'ai');
+            console.log("📝 Transcrição da IA completa:", currentAiTranscript);
+            if (currentAiTranscript.trim()) {
+              saveTranscript(currentAiTranscript, 'ai');
+              currentAiTranscript = ''; // Reset para próxima resposta
             }
+          }
+          
+          // Logs adicionais para debug
+          if (data.type.includes('transcript') || data.type.includes('audio')) {
+            console.log("🔍 Evento de áudio/transcript:", {
+              type: data.type,
+              transcript: data.transcript,
+              delta: data.delta,
+              content: data.content
+            });
           }
           
         } catch (error) {
