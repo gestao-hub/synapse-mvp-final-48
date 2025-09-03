@@ -473,9 +473,20 @@ export function RealSimulationEngine({ scenario, userRole, onComplete, onExit }:
         console.log('✅ Sessão finalizada com sucesso')
       }
 
-      // Chamar análise da sessão de forma assíncrona
-      if (userTranscript && userTranscript.trim().length > 0) {
-        analyzeSessionScore(userTranscript, scenario.area);
+      // Chamar análise da sessão com sessionId, não transcript
+      console.log("🔍 Iniciando análise da sessão:", sessionId, "área:", scenario.area);
+      try {
+        const analysisResult = await supabase.functions.invoke('score-session-by-area', {
+          body: { sessionId, area: scenario.area }
+        });
+        
+        if (analysisResult.error) {
+          console.error('❌ Erro na análise:', analysisResult.error);
+        } else {
+          console.log("✅ Análise concluída:", analysisResult.data);
+        }
+      } catch (error) {
+        console.error('❌ Erro ao chamar análise:', error);
       }
 
       const finalResults = {

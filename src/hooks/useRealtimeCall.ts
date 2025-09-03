@@ -208,6 +208,19 @@ export function useRealtimeCall() {
             }
           }
           
+          // Log para debug de timeouts e limites
+          if (data.type === 'session.updated') {
+            console.log("⚙️ Sessão atualizada:", data.session);
+          }
+          
+          if (data.type === 'error') {
+            console.error("❌ Erro na sessão WebRTC:", data.error);
+          }
+          
+          if (data.type === 'rate_limits.updated') {
+            console.log("⏱️ Rate limits atualizados:", data.rate_limits);
+          }
+          
           // Logs expandidos para debug de eventos de transcrição
           if (data.type.includes('transcript') || 
               data.type.includes('audio') || 
