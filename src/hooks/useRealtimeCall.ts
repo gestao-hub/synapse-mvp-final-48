@@ -29,18 +29,31 @@ export function useRealtimeCall() {
     return () => { el.remove(); };
   }, []);
 
+  // Controles para evitar duplicação
+  const lastSavedUserText = useRef<string>('');
+  const lastSavedAiText = useRef<string>('');
+  const turnCounter = useRef<number>(0);
+
   // Função para salvar transcrições em tempo real
   const saveTranscript = async (text: string, speaker: 'user' | 'ai') => {
     if (!currentSessionId || !text?.trim()) return;
     
+    // Evitar duplicação - verificar se já foi salvo
+    const lastSaved = speaker === 'user' ? lastSavedUserText.current : lastSavedAiText.current;
+    if (lastSaved === text) {
+      console.log(`⏭️ Transcript ${speaker} já foi salvo, ignorando duplicação`);
+      return;
+    }
+    
     try {
       console.log(`📝 Salvando transcript ${speaker}:`, text.substring(0, 50) + '...');
       
+      const currentTurn = turnCounter.current++;
       const response = await supabase.functions.invoke('save-live-transcript', {
         body: {
           sessionId: currentSessionId,
           [speaker === 'user' ? 'userTranscript' : 'aiTranscript']: text,
-          turnIndex: Date.now(),
+          turnIndex: currentTurn,
           speakerType: speaker
         }
       });
@@ -50,14 +63,16 @@ export function useRealtimeCall() {
         return;
       }
       
-      // Atualizar estado local apenas após confirmação do save
+      // Atualizar referência para evitar duplicação
       if (speaker === 'user') {
+        lastSavedUserText.current = text;
         setUserTranscript(prev => prev + (prev ? '\n' : '') + text);
       } else {
+        lastSavedAiText.current = text;
         setAiTranscript(prev => prev + (prev ? '\n' : '') + text);
       }
       
-      console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50), response.data);
+      console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50), `turno ${currentTurn}`);
     } catch (error) {
       console.error(`❌ Erro ao salvar transcript ${speaker}:`, error);
     }
@@ -188,16 +203,9 @@ export function useRealtimeCall() {
             console.log("🎤 Usuário parou de falar");
           }
           
-          // Eventos de transcrição do usuário - MÚLTIPLOS TIPOS POSSÍVEIS
+          // Eventos de transcrição do usuário
           if (data.type === 'conversation.item.input_audio_transcription.completed') {
-            console.log("📝 Transcrição do usuário completa (completed):", data.transcript);
-            if (data.transcript?.trim()) {
-              saveTranscript(data.transcript, 'user');
-            }
-          }
-          
-          if (data.type === 'input_audio_transcription.completed') {
-            console.log("📝 Transcrição do usuário completa (input):", data.transcript);
+            console.log("📝 Transcrição do usuário completa:", data.transcript);
             if (data.transcript?.trim()) {
               saveTranscript(data.transcript, 'user');
             }
@@ -384,6 +392,9 @@ export function useRealtimeCall() {
     setUserTranscript("");
     setAiTranscript("");
     startTimeRef.current = null;
+    lastSavedUserText.current = '';
+    lastSavedAiText.current = '';
+    turnCounter.current = 0;
   }
 
   return { 
