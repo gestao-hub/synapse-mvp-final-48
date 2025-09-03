@@ -184,7 +184,18 @@ export function useRealtimeCall() {
       dataChannelRef.current = dataChannel;
       
       dataChannel.addEventListener("open", () => {
-        console.log("✅ DataChannel aberto - pronto para receber transcrições");
+        console.log("✅ DataChannel aberto - enviando configuração de sessão");
+        
+        // Configurar sessão após conexão estabelecida
+        const sessionConfig = {
+          type: "session.update",
+          session: {
+            input_audio_transcription: {
+              model: "whisper-1"
+            }
+          }
+        };
+        dataChannel.send(JSON.stringify(sessionConfig));
       });
       
       let currentAiTranscript = '';

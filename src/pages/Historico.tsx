@@ -5,7 +5,7 @@ import { AdvancedFilters, FilterOptions } from '@/components/filters/AdvancedFil
 import { TrendAnalysis } from '@/components/analytics/TrendAnalysis'
 import { DataExporter } from '@/components/export/DataExporter'
 import { ScoreTooltip, PercentileTooltip, CompletionRateTooltip } from '@/components/common/Tooltip'
-import { useDashboardData } from '@/hooks/useDashboardData'
+import { useLiveSessionHistory } from '@/hooks/useLiveSessionHistory'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { format, isAfter, subDays, subMonths, isValid } from 'date-fns'
@@ -13,7 +13,7 @@ import { ptBR } from 'date-fns/locale'
 import { Clock, Target, TrendingUp, Calendar, BarChart } from 'lucide-react'
 
 export default function Historico() {
-  const { recentSessions: sessions, isLoading: loading } = useDashboardData()
+  const { sessions, isLoading: loading, error } = useLiveSessionHistory();
   
   const [filters, setFilters] = useState<FilterOptions>({
     period: 'all',
@@ -132,14 +132,12 @@ export default function Historico() {
     // Taxa de conclusão (assumindo que sessões com score foram concluídas)
     const completionRate = totalSessions > 0 ? (sessionsWithScore.length / totalSessions) * 100 : 0
 
-    // Duração total estimada
+    // Duração total baseada no campo duration_ms das sessões live
     const totalDuration = filteredSessions.reduce((sum, session) => {
-      if ('finished_at' in session && session.finished_at && session.started_at) {
-        return sum + Math.round((new Date(session.finished_at).getTime() - new Date(session.started_at).getTime()) / 60000)
-      } else if ('duration_ms' in session) {
-        return sum + Math.round((session as any).duration_ms / 60000)
+      if (session.duration_ms && session.duration_ms > 0) {
+        return sum + Math.round(session.duration_ms / 60000) // converter ms para minutos
       }
-      return sum + 15 // Estimativa padrão de 15 minutos
+      return sum + 15 // Estimativa padrão de 15 minutos se não houver dados
     }, 0)
 
     // Melhor score
@@ -295,25 +293,25 @@ export default function Historico() {
                   <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="outline" className="capitalize">
-                          {session.track}
-                        </Badge>
-                        <Badge variant={('scenario' in session) ? 'default' : 'secondary'}>
-                          {('scenario' in session) ? 'Regular' : 'Live'}
-                        </Badge>
-                      </div>
-                      <p className="font-medium">
-                        {('scenario' in session) ? session.scenario : 'Sessão Live'}
-                      </p>
+                         <Badge variant="outline" className="capitalize">
+                           {session.track}
+                         </Badge>
+                         <Badge variant="secondary">
+                           Sessão Live
+                         </Badge>
+                       </div>
+                       <p className="font-medium">
+                         {session.metadata?.scenario_title || 'Simulação Live'}
+                       </p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(session.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold">
-                        {(session as any).score || (session as any).metadata?.analyzed_score || 'N/A'}
-                        {((session as any).score || (session as any).metadata?.analyzed_score) && '/10'}
-                      </div>
+                       <div className="text-lg font-bold">
+                         {session.score_overall || 'N/A'}
+                         {session.score_overall && '/10'}
+                       </div>
                       {stats.recentTrend !== 0 && (
                         <div className={`text-sm flex items-center gap-1 ${
                           stats.recentTrend > 0 ? 'text-green-600' : 'text-red-600'
