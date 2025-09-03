@@ -176,6 +176,49 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        
+        {/* Logout Section */}
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton asChild className="h-auto p-0">
+                        <button 
+                          onClick={signOut}
+                          className="group flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 ease-in-out border border-transparent hover:border-border/60 hover:bg-destructive/10 text-destructive hover:text-destructive w-full"
+                        >
+                          <div className="p-2 rounded-lg transition-all duration-300 flex-shrink-0 group-hover:bg-destructive/15">
+                            <LogOut className="h-5 w-5" />
+                          </div>
+                          
+                          {!collapsed && (
+                            <div className="flex-1 min-w-0 text-left">
+                              <div className="font-semibold text-sm">
+                                Sair
+                              </div>
+                              <div className="text-xs text-muted-foreground truncate mt-1 leading-relaxed">
+                                Fazer logout da plataforma
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      </SidebarMenuButton>
+                    </TooltipTrigger>
+                    {collapsed && (
+                      <TooltipContent side="right" className="max-w-xs">
+                        <p className="font-medium">Sair</p>
+                        <p className="text-sm text-muted-foreground mt-1">Fazer logout da plataforma</p>
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
