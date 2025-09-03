@@ -184,19 +184,38 @@ export function useRealtimeCall() {
       dataChannelRef.current = dataChannel;
       
       dataChannel.addEventListener("open", () => {
-        console.log("✅ DataChannel aberto - enviando configuração de sessão");
+        console.log("✅ DataChannel aberto - aguardando session.created para configurar");
+      });
+      
+      let sessionConfigured = false;
+      
+      const configureSession = () => {
+        if (sessionConfigured) return;
+        sessionConfigured = true;
         
-        // Configurar sessão após conexão estabelecida
+        console.log("🔧 Configurando sessão com transcrição ativada");
         const sessionConfig = {
           type: "session.update",
           session: {
+            modalities: ["text", "audio"],
+            input_audio_format: "pcm16",
+            output_audio_format: "pcm16",
             input_audio_transcription: {
               model: "whisper-1"
-            }
+            },
+            turn_detection: {
+              type: "server_vad",
+              threshold: 0.3, // Mais sensível
+              prefix_padding_ms: 300,
+              silence_duration_ms: 800 // Menos tempo de silêncio
+            },
+            temperature: 0.8,
+            max_response_output_tokens: "inf"
           }
         };
         dataChannel.send(JSON.stringify(sessionConfig));
-      });
+        console.log("📡 Configuração de sessão enviada:", sessionConfig);
+      };
       
       let currentAiTranscript = '';
       
@@ -204,6 +223,12 @@ export function useRealtimeCall() {
         try {
           const data = JSON.parse(event.data);
           console.log("📡 Evento recebido:", data.type, data);
+          
+          // Configurar sessão após receber session.created
+          if (data.type === 'session.created') {
+            console.log("🎯 Sessão criada pela OpenAI, configurando agora...");
+            setTimeout(configureSession, 100); // Pequeno delay para garantir estabilidade
+          }
           
           // Capturar transcrições em tempo real
           if (data.type === 'input_audio_buffer.speech_started') {
@@ -214,10 +239,12 @@ export function useRealtimeCall() {
             console.log("🎤 Usuário parou de falar");
           }
           
-          // Eventos de transcrição do usuário - múltiplos tipos de evento
+          // Eventos de transcrição do usuário - TODOS os possíveis tipos
           if (data.type === 'conversation.item.input_audio_transcription.completed' || 
               data.type === 'input_audio_buffer.committed' ||
-              data.type === 'conversation.item.created' && data.item?.content?.[0]?.transcript) {
+              data.type === 'conversation.item.input_audio_transcription.delta' ||
+              data.type === 'input_audio_buffer.speech_stopped' ||
+              (data.type === 'conversation.item.created' && data.item?.content?.[0]?.transcript)) {
             console.log("📝 Transcrição do usuário detectada:", data.type, data.transcript || data.item?.content?.[0]?.transcript);
             const transcript = data.transcript || data.item?.content?.[0]?.transcript;
             if (transcript?.trim()) {
@@ -314,12 +341,17 @@ export function useRealtimeCall() {
 
       setStatus("connected");
       
-      // Aguardar conexão estabelecer e configurar eventos
+          // Aguardar conexão estabelecer e tentar configurar se ainda não foi feito
       setTimeout(() => {
         console.log("✅ Conexão WebRTC totalmente estabelecida");
         console.log("🎤 Captura de transcrições ativada para sessão:", sessionId);
-        // A IA deveria iniciar automaticamente com as instruções do realtime-token
-      }, 1000);
+        
+        // Fallback: se session.created não foi recebido, forçar configuração
+        if (!sessionConfigured) {
+          console.log("🔄 Forçando configuração da sessão como fallback");
+          configureSession();
+        }
+      }, 2000);
     } catch (error) {
       console.error("=== ERRO DETALHADO ===");
       console.error("Tipo do erro:", error);
