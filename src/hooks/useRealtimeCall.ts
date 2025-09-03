@@ -231,13 +231,19 @@ export function useRealtimeCall() {
           }
           
           // Capturar transcrições em tempo real
-          if (data.type === 'input_audio_buffer.speech_started') {
-            console.log("🎤 Usuário começou a falar");
-          }
-          
-          if (data.type === 'input_audio_buffer.speech_stopped') {
-            console.log("🎤 Usuário parou de falar");
-          }
+        if (data.type === 'input_audio_buffer.speech_started') {
+          console.log("🎤 Usuário começou a falar");
+        }
+        
+        if (data.type === 'input_audio_buffer.speech_stopped') {
+          console.log("🎤 Usuário parou de falar");
+          // Forçar commit do buffer de áudio quando o usuário parar de falar
+          const commitEvent = {
+            type: "input_audio_buffer.commit"
+          };
+          dataChannel.send(JSON.stringify(commitEvent));
+          console.log("📤 Forçando commit do buffer de áudio");
+        }
           
           // Eventos de transcrição do usuário - TODOS os possíveis tipos
           if (data.type === 'conversation.item.input_audio_transcription.completed' || 
