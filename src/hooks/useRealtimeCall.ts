@@ -214,11 +214,14 @@ export function useRealtimeCall() {
             console.log("🎤 Usuário parou de falar");
           }
           
-          // Eventos de transcrição do usuário
-          if (data.type === 'conversation.item.input_audio_transcription.completed') {
-            console.log("📝 Transcrição do usuário completa:", data.transcript);
-            if (data.transcript?.trim()) {
-              saveTranscript(data.transcript, 'user');
+          // Eventos de transcrição do usuário - múltiplos tipos de evento
+          if (data.type === 'conversation.item.input_audio_transcription.completed' || 
+              data.type === 'input_audio_buffer.committed' ||
+              data.type === 'conversation.item.created' && data.item?.content?.[0]?.transcript) {
+            console.log("📝 Transcrição do usuário detectada:", data.type, data.transcript || data.item?.content?.[0]?.transcript);
+            const transcript = data.transcript || data.item?.content?.[0]?.transcript;
+            if (transcript?.trim()) {
+              saveTranscript(transcript, 'user');
             }
           }
           
@@ -254,18 +257,25 @@ export function useRealtimeCall() {
             console.log("⏱️ Rate limits atualizados:", data.rate_limits);
           }
           
-          // Logs expandidos para debug de eventos de transcrição
-          if (data.type.includes('transcript') || 
-              data.type.includes('audio') || 
-              data.type.includes('input_audio') ||
-              data.type.includes('conversation.item')) {
-            console.log("🔍 Evento detalhado:", {
-              type: data.type,
-              transcript: data.transcript,
-              delta: data.delta,
-              content: data.content,
-              fullEvent: data
-            });
+          // Log TODOS os eventos para debug completo
+          console.log("🔍 EVENTO COMPLETO:", {
+            type: data.type,
+            transcript: data.transcript,
+            delta: data.delta,
+            content: data.content,
+            item: data.item,
+            fullData: data
+          });
+          
+          // Tentar capturar transcrição do usuário em QUALQUER evento que contenha texto
+          if (data.transcript && !data.delta && data.type !== 'response.audio_transcript.done') {
+            console.log("🔥 FORÇANDO captura de transcrição do usuário:", data.transcript);
+            saveTranscript(data.transcript, 'user');
+          }
+          
+          if (data.item?.content?.[0]?.transcript) {
+            console.log("🔥 FORÇANDO captura via item.content:", data.item.content[0].transcript);
+            saveTranscript(data.item.content[0].transcript, 'user');
           }
           
         } catch (error) {
