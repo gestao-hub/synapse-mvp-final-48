@@ -31,10 +31,12 @@ export function useRealtimeCall() {
 
   // Função para salvar transcrições em tempo real
   const saveTranscript = async (text: string, speaker: 'user' | 'ai') => {
-    if (!currentSessionId) return;
+    if (!currentSessionId || !text?.trim()) return;
     
     try {
-      await supabase.functions.invoke('save-live-transcript', {
+      console.log(`📝 Salvando transcript ${speaker}:`, text.substring(0, 50) + '...');
+      
+      const response = await supabase.functions.invoke('save-live-transcript', {
         body: {
           sessionId: currentSessionId,
           [speaker === 'user' ? 'userTranscript' : 'aiTranscript']: text,
@@ -43,24 +45,35 @@ export function useRealtimeCall() {
         }
       });
       
-      // Atualizar estado local
+      if (response.error) {
+        console.error(`❌ Erro na função save-live-transcript:`, response.error);
+        return;
+      }
+      
+      // Atualizar estado local apenas após confirmação do save
       if (speaker === 'user') {
         setUserTranscript(prev => prev + (prev ? '\n' : '') + text);
       } else {
         setAiTranscript(prev => prev + (prev ? '\n' : '') + text);
       }
       
-      console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50));
+      console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50), response.data);
     } catch (error) {
       console.error(`❌ Erro ao salvar transcript ${speaker}:`, error);
     }
   };
+
+  // Adicionamos uma referência ao tempo de início
+  const startTimeRef = useRef<number | null>(null);
 
   async function startCall({ track, scenario, systemPrompt, voiceId }: StartOpts) {
     try {
       setStatus("connecting");
       console.log("=== INICIANDO CHAMADA ===");
       console.log("Parâmetros:", { track, scenario, systemPrompt, voiceId });
+      
+      // Marcar tempo de início real
+      startTimeRef.current = Date.now();
       
       // Criar nova sessão no banco
       const sessionId = crypto.randomUUID();
@@ -79,7 +92,8 @@ export function useRealtimeCall() {
             scenario_title: scenario || 'Simulação Live',
             system_prompt: systemPrompt,
             voice_id: voiceId,
-            started_at: new Date().toISOString()
+            started_at: new Date().toISOString(),
+            start_timestamp: startTimeRef.current
           }
         });
         
@@ -316,22 +330,24 @@ export function useRealtimeCall() {
     console.log("🏁 Finalizando chamada e salvando dados finais...");
     
     // Finalizar a sessão no banco antes de fechar conexões
-    if (currentSessionId) {
+    if (currentSessionId && startTimeRef.current) {
       try {
-        const startTime = Date.now() - 300000; // Estimativa de 5 minutos atrás
+        const actualDuration = Date.now() - startTimeRef.current;
+        console.log('🕐 Duração real calculada:', actualDuration, 'ms');
         
         const { error: finalizeError } = await supabase
           .from('sessions_live')
           .update({
             completed_at: new Date().toISOString(),
-            duration_ms: Date.now() - startTime, // Duração estimada
+            duration_ms: actualDuration,
             transcript_user: userTranscript || null,
             transcript_ai: aiTranscript || null,
             metadata: {
               completed: true,
               final_user_transcript: userTranscript,
               final_ai_transcript: aiTranscript,
-              total_interactions: (userTranscript.split('\n').length + aiTranscript.split('\n').length)
+              total_interactions: (userTranscript.split('\n').length + aiTranscript.split('\n').length),
+              actual_duration: actualDuration
             }
           })
           .eq('id', currentSessionId);
@@ -339,7 +355,7 @@ export function useRealtimeCall() {
         if (finalizeError) {
           console.error('❌ Erro ao finalizar sessão:', finalizeError);
         } else {
-          console.log('✅ Sessão finalizada com sucesso:', currentSessionId);
+          console.log('✅ Sessão finalizada com sucesso:', currentSessionId, 'duração:', actualDuration);
         }
       } catch (error) {
         console.error('❌ Erro ao salvar dados finais:', error);
@@ -367,6 +383,7 @@ export function useRealtimeCall() {
     setCurrentSessionId(null);
     setUserTranscript("");
     setAiTranscript("");
+    startTimeRef.current = null;
   }
 
   return { 
