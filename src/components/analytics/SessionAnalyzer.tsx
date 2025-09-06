@@ -172,13 +172,15 @@ export function SessionAnalyzer() {
   };
 
   const runBatchAnalysis = async () => {
+    console.log('🎬 Iniciando análise em lote...');
     setIsAnalyzing(true);
     setResults([]);
     setProgress(0);
 
     try {
+      console.log('🔍 Buscando sessões live não analisadas...');
       // Buscar sessões live não analisadas
-      const { data: liveSessions } = await supabase
+      const { data: liveSessions, error: liveError } = await supabase
         .from('sessions_live')
         .select('id, transcript_user, track, metadata')
         .or('metadata->>analyzed_score.is.null,metadata.is.null')
@@ -186,24 +188,32 @@ export function SessionAnalyzer() {
         .not('transcript_user', 'eq', '')
         .not('transcript_user', 'eq', 'Conversa em tempo real via WebRTC')
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(5); // Reduzir para 5 para teste
 
+      console.log('📊 Sessões live encontradas:', { count: liveSessions?.length, error: liveError });
+
+      console.log('🔍 Buscando sessões regulares não analisadas...');
       // Buscar sessões regulares não analisadas  
-      const { data: regularSessions } = await supabase
+      const { data: regularSessions, error: regularError } = await supabase
         .from('sessions')
         .select('id, transcript, track, score')
         .is('score', null)
         .not('transcript', 'is', null)
         .not('transcript', 'eq', '')
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(5); // Reduzir para 5 para teste
+
+      console.log('📊 Sessões regulares encontradas:', { count: regularSessions?.length, error: regularError });
 
       const allSessions = [
         ...(liveSessions || []).map(s => ({ ...s, type: 'live' as const, transcript: s.transcript_user })),
         ...(regularSessions || []).map(s => ({ ...s, type: 'regular' as const }))
       ];
 
+      console.log('📋 Total de sessões para analisar:', allSessions.length);
+
       if (allSessions.length === 0) {
+        console.log('✅ Nenhuma sessão pendente encontrada');
         toast({
           title: "Nenhuma sessão pendente",
           description: "Todas as sessões já foram analisadas!",
@@ -217,23 +227,40 @@ export function SessionAnalyzer() {
       // Analisar cada sessão
       for (let i = 0; i < allSessions.length; i++) {
         const session = allSessions[i];
+        console.log(`🔄 Analisando sessão ${i + 1}/${allSessions.length}:`, session.id.substring(0, 8));
         
-        const result = await analyzeSession(
-          session.id, 
-          session.transcript, 
-          session.track, 
-          session.type
-        );
+        try {
+          const result = await analyzeSession(
+            session.id, 
+            session.transcript, 
+            session.track, 
+            session.type
+          );
+          
+          console.log(`📊 Resultado sessão ${session.id.substring(0, 8)}:`, result);
+          analysisResults.push(result);
+          setResults([...analysisResults]);
+          
+          const progressPercent = ((i + 1) / allSessions.length) * 100;
+          console.log(`📈 Progresso: ${progressPercent}%`);
+          setProgress(progressPercent);
+          
+        } catch (error) {
+          console.error(`💥 Erro ao analisar sessão ${session.id}:`, error);
+          analysisResults.push({
+            sessionId: session.id,
+            sessionType: session.type,
+            success: false,
+            error: error instanceof Error ? error.message : 'Erro desconhecido'
+          });
+        }
         
-        analysisResults.push(result);
-        setResults([...analysisResults]);
-        setProgress(((i + 1) / allSessions.length) * 100);
-        
-        // Aguardar um pouco entre análises para não sobrecarregar
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Aguardar um pouco entre análises
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
       const successCount = analysisResults.filter(r => r.success).length;
+      console.log(`🎯 Análise concluída: ${successCount}/${analysisResults.length} sucessos`);
       
       toast({
         title: "Análise concluída",
@@ -244,13 +271,14 @@ export function SessionAnalyzer() {
       await loadPendingSessions();
 
     } catch (error) {
-      console.error('Erro na análise em lote:', error);
+      console.error('💥 Erro na análise em lote:', error);
       toast({
         title: "Erro",
         description: "Erro durante a análise em lote",
         variant: "destructive"
       });
     } finally {
+      console.log('🏁 Finalizando análise em lote...');
       setIsAnalyzing(false);
     }
   };
