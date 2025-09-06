@@ -101,12 +101,13 @@ export function SessionAnalyzer() {
       }
 
       if (!data || typeof data.score !== 'number') {
-        console.warn('❌ Resposta inválida:', data);
+        console.warn('❌ Resposta inválida da OpenAI:', data);
+        console.warn('📊 Dados recebidos completos:', JSON.stringify(data, null, 2));
         return {
           sessionId,
           sessionType,
           success: false,
-          reason: 'Resposta inválida da IA'
+          reason: `Resposta inválida da IA: ${JSON.stringify(data)}`
         };
       }
 

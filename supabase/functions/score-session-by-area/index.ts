@@ -97,18 +97,51 @@ serve(async (req) => {
     });
     
     console.log("📥 Resposta OpenAI:", { status: r.status, ok: r.ok });
-    const data = await r.json();
     
     if (!r.ok) {
-      console.error("❌ Erro da OpenAI:", data);
-      return new Response(JSON.stringify({ error: data?.error?.message || "Falha no score" }), { status: 400, headers });
+      const errorData = await r.json();
+      console.error("❌ Erro da OpenAI:", errorData);
+      return new Response(JSON.stringify({ 
+        error: errorData?.error?.message || "Falha no score",
+        details: errorData 
+      }), { status: 400, headers });
     }
+    
+    const data = await r.json();
+    console.log("🔍 Resposta completa da OpenAI:", JSON.stringify(data, null, 2));
 
     let parsed; 
     try { 
-      parsed = JSON.parse(data.choices?.[0]?.message?.content || "{}"); 
-    } catch { 
-      parsed = {}; 
+      const content = data.choices?.[0]?.message?.content;
+      console.log("📝 Conteúdo a ser parseado:", content);
+      
+      if (!content) {
+        console.error("❌ Nenhum conteúdo retornado pela OpenAI");
+        return new Response(JSON.stringify({ 
+          error: "Nenhum conteúdo retornado",
+          rawResponse: data 
+        }), { status: 400, headers });
+      }
+      
+      parsed = JSON.parse(content);
+      console.log("✅ JSON parseado com sucesso:", parsed);
+      
+      // Validar se tem score
+      if (typeof parsed.score !== 'number') {
+        console.error("❌ Score inválido:", parsed.score);
+        return new Response(JSON.stringify({ 
+          error: "Score inválido na resposta",
+          parsedContent: parsed 
+        }), { status: 400, headers });
+      }
+      
+    } catch (parseError) { 
+      console.error("❌ Erro ao fazer parse:", parseError);
+      return new Response(JSON.stringify({ 
+        error: "Erro ao fazer parse da resposta",
+        rawContent: data.choices?.[0]?.message?.content,
+        parseError: parseError.message 
+      }), { status: 400, headers });
     }
     
     // Log detalhado da resposta para debug
