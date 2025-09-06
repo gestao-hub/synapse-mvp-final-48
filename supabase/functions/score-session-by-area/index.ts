@@ -2,12 +2,11 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY")!;
-const ALLOWED = ["https://id-preview--3b4bbca7-4357-4d2e-8f56-d2294f9f3d9a.lovable.app", "http://localhost:5173"];
+const ALLOWED = ["https://id-preview--3b4bbca7-4357-4d2e-8f56-d2294f9f3d9a.lovable.app", "http://localhost:5173", "*"];
 
 function cors(origin: string | null) {
-  const allow = origin && ALLOWED.includes(origin) ? origin : ALLOWED[0];
   return {
-    "Access-Control-Allow-Origin": allow,
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",

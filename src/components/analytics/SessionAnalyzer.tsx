@@ -85,6 +85,18 @@ export function SessionAnalyzer() {
 
       if (error) {
         console.error('❌ Erro na edge function:', error);
+        
+        // Verificar se é problema de configuração
+        if (error.message?.includes('Failed to send') || error.message?.includes('Failed to fetch')) {
+          console.error('🚨 Possível problema de configuração da edge function');
+          return {
+            sessionId,
+            sessionType,
+            success: false,
+            reason: 'Edge function não disponível - verifique a configuração do Supabase'
+          };
+        }
+        
         throw error;
       }
 
