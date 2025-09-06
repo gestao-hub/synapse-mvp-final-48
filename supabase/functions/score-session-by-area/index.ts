@@ -66,34 +66,59 @@ Transcript: ${transcript}`.trim();
 }
 
 serve(async (req) => {
+  console.log("🎬 Edge function iniciada");
   const headers = cors(req.headers.get("origin"));
-  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers });
-  if (req.method !== "POST") return new Response(JSON.stringify({ error: "Método não permitido" }), { status: 405, headers });
+  
+  if (req.method === "OPTIONS") {
+    console.log("⚡ CORS preflight request");
+    return new Response(null, { status: 204, headers });
+  }
+  
+  if (req.method !== "POST") {
+    console.log("❌ Método não permitido:", req.method);
+    return new Response(JSON.stringify({ error: "Método não permitido" }), { status: 405, headers });
+  }
 
   try {
+    console.log("🔍 Fazendo parse do body...");
     const { transcript, area = 'rh' } = await req.json();
-    if (!transcript) return new Response(JSON.stringify({ error: "transcript obrigatório" }), { status: 400, headers });
+    console.log("📋 Dados recebidos:", { 
+      area, 
+      transcriptLength: transcript?.length,
+      hasTranscript: !!transcript 
+    });
+    
+    if (!transcript) {
+      console.log("❌ Transcript não fornecido");
+      return new Response(JSON.stringify({ error: "transcript obrigatório" }), { status: 400, headers });
+    }
 
     console.log("🔍 Iniciando análise:", { area, transcriptLength: transcript.length });
     
-    if (!OPENAI_API_KEY) {
+    const apiKey = Deno.env.get('OPENAI_API_KEY');
+    console.log("🔑 API Key status:", { hasKey: !!apiKey, keyLength: apiKey?.length || 0 });
+    
+    if (!apiKey) {
       console.error("❌ OPENAI_API_KEY não configurada");
       return new Response(JSON.stringify({ error: "Chave da API não configurada" }), { status: 500, headers });
     }
 
     const prompt = buildPrompt(area, transcript);
-    console.log("📝 Prompt gerado:", prompt.substring(0, 200) + "...");
+    console.log("📝 Prompt gerado:", prompt.substring(0, 100) + "...");
 
     console.log("🚀 Enviando para OpenAI...");
+    const requestBody = { 
+      model: "gpt-5-nano-2025-08-07", 
+      max_completion_tokens: 500,
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" }
+    };
+    console.log("📤 Request body:", JSON.stringify(requestBody, null, 2));
+    
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        model: "gpt-5-nano-2025-08-07", 
-        max_completion_tokens: 500,
-        messages: [{ role: "user", content: prompt }],
-        response_format: { type: "json_object" }
-      })
+      headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody)
     });
     
     console.log("📥 Resposta OpenAI:", { status: r.status, ok: r.ok });
@@ -155,6 +180,11 @@ serve(async (req) => {
     
     return new Response(JSON.stringify(parsed), { status: 200, headers });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e?.message || "Erro interno" }), { status: 500, headers });
+    console.error("💥 ERRO GERAL:", e);
+    console.error("Stack trace:", e.stack);
+    return new Response(JSON.stringify({ 
+      error: e?.message || "Erro interno",
+      details: e?.stack || "Sem stack trace"
+    }), { status: 500, headers });
   }
 });
