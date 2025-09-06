@@ -54,8 +54,15 @@ export function SessionAnalyzer() {
 
   const analyzeSession = async (sessionId: string, transcript: string, area: string, sessionType: 'live' | 'regular'): Promise<AnalysisResult> => {
     try {
+      console.log(`🔍 Iniciando análise da sessão ${sessionId} (${sessionType}):`, { 
+        area, 
+        transcriptLength: transcript.length,
+        transcriptPreview: transcript.substring(0, 100) + '...'
+      });
+
       // Verificar se há transcript para análise
       if (!transcript || transcript.trim().length < 10) {
+        console.warn('❌ Transcript insuficiente:', transcript);
         return {
           sessionId,
           sessionType,
@@ -64,6 +71,8 @@ export function SessionAnalyzer() {
         };
       }
 
+      console.log('🚀 Chamando edge function score-session-by-area...');
+      
       // Chamar edge function de análise
       const { data, error } = await supabase.functions.invoke('score-session-by-area', {
         body: { 
@@ -72,11 +81,15 @@ export function SessionAnalyzer() {
         }
       });
 
+      console.log('📥 Resposta da edge function:', { data, error });
+
       if (error) {
+        console.error('❌ Erro na edge function:', error);
         throw error;
       }
 
       if (!data || typeof data.score !== 'number') {
+        console.warn('❌ Resposta inválida:', data);
         return {
           sessionId,
           sessionType,
@@ -86,6 +99,7 @@ export function SessionAnalyzer() {
       }
 
       // Atualizar sessão com o score analisado
+      console.log('💾 Salvando resultado no banco de dados...');
       const updateData = {
         metadata: {
           analyzed_score: data.score,
@@ -97,19 +111,34 @@ export function SessionAnalyzer() {
       };
 
       if (sessionType === 'live') {
-        await supabase
+        const { error: updateError } = await supabase
           .from('sessions_live')
           .update(updateData)
           .eq('id', sessionId);
+        
+        if (updateError) {
+          console.error('❌ Erro ao atualizar sessão live:', updateError);
+          throw updateError;
+        }
       } else {
-        await supabase
+        const { error: updateError } = await supabase
           .from('sessions')
           .update({ 
             score: data.score,
             ...updateData 
           })
           .eq('id', sessionId);
+          
+        if (updateError) {
+          console.error('❌ Erro ao atualizar sessão:', updateError);
+          throw updateError;
+        }
       }
+
+      console.log(`✅ Análise concluída com sucesso para sessão ${sessionId}:`, {
+        score: data.score,
+        metrics: data.metrics
+      });
 
       return {
         sessionId,
@@ -119,6 +148,7 @@ export function SessionAnalyzer() {
       };
 
     } catch (error) {
+      console.error(`❌ Erro durante análise da sessão ${sessionId}:`, error);
       return {
         sessionId,
         sessionType,
