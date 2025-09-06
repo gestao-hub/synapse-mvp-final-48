@@ -75,21 +75,35 @@ serve(async (req) => {
     const { transcript, area = 'rh' } = await req.json();
     if (!transcript) return new Response(JSON.stringify({ error: "transcript obrigatório" }), { status: 400, headers });
 
-    const prompt = buildPrompt(area, transcript);
+    console.log("🔍 Iniciando análise:", { area, transcriptLength: transcript.length });
+    
+    if (!OPENAI_API_KEY) {
+      console.error("❌ OPENAI_API_KEY não configurada");
+      return new Response(JSON.stringify({ error: "Chave da API não configurada" }), { status: 500, headers });
+    }
 
+    const prompt = buildPrompt(area, transcript);
+    console.log("📝 Prompt gerado:", prompt.substring(0, 200) + "...");
+
+    console.log("🚀 Enviando para OpenAI...");
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Authorization": `Bearer ${OPENAI_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        model: "gpt-4o-mini", 
+        model: "gpt-5-mini-2025-08-07", 
         max_completion_tokens: 500,
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" }
       })
     });
     
+    console.log("📥 Resposta OpenAI:", { status: r.status, ok: r.ok });
     const data = await r.json();
-    if (!r.ok) return new Response(JSON.stringify({ error: data?.error?.message || "Falha no score" }), { status: 400, headers });
+    
+    if (!r.ok) {
+      console.error("❌ Erro da OpenAI:", data);
+      return new Response(JSON.stringify({ error: data?.error?.message || "Falha no score" }), { status: 400, headers });
+    }
 
     let parsed; 
     try { 
