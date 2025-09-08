@@ -136,7 +136,7 @@ IMPORTANTE: Mantenha um tom profissional mas desafiador, criando cenários que r
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-5-mini-2025-08-07',
+      model: 'gpt-4o-mini',
       messages,
       max_completion_tokens: 300,
     }),
@@ -204,7 +204,7 @@ Responda APENAS em formato JSON válido:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4.1-2025-04-14',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: evaluationPrompt }],
       max_completion_tokens: 800,
     }),

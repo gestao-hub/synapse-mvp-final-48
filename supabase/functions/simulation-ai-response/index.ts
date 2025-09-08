@@ -73,7 +73,7 @@ Responda à última fala do usuário de forma natural e apropriada ao contexto.
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-mini-2025-08-07',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: transcript }
