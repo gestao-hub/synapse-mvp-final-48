@@ -4,9 +4,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 function getCorsHeaders(origin: string | null) {
   const ALLOWED_ORIGINS = [
     "https://preview--synapse-voice-coach.lovable.app",
-    "http://localhost:5173",
-    "https://excluvia.com.br",
-    "https://www.excluvia.com.br"
+    "http://localhost:5173"
   ];
   const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -48,21 +46,13 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: "Método não permitido" }), { status: 405, headers: corsHeaders });
   }
   try {
-    console.log("🎤 RH Voice Turn iniciado:", { 
-      method: req.method, 
-      origin: req.headers.get("origin"),
-      contentType: req.headers.get("content-type") 
-    });
-
     let audioFile: File | null = null;
     const contentType = req.headers.get("content-type") || "";
 
     if (contentType.includes("multipart/form-data")) {
-      console.log("📝 Processando multipart/form-data");
       const form = await req.formData();
       audioFile = form.get("audio") as File | null;
     } else {
-      console.log("📝 Processando JSON com audioBase64");
       const body = await req.json().catch(() => ({}));
       if (body?.audioBase64) {
         const bin = Uint8Array.from(atob(body.audioBase64), c => c.charCodeAt(0));
@@ -71,20 +61,12 @@ serve(async (req) => {
     }
 
     if (!audioFile) {
-      console.error("❌ Nenhum arquivo de áudio recebido");
       return new Response(JSON.stringify({ error: "Envie 'audio' (form-data) ou 'audioBase64' (JSON)." }), {
         status: 400, headers: corsHeaders
       });
     }
 
-    console.log("🎧 Arquivo de áudio recebido:", {
-      name: audioFile.name,
-      type: audioFile.type,
-      size: audioFile.size
-    });
-
     // 1) Transcrição (OpenAI Whisper)
-    console.log("🤖 Enviando para Whisper...");
     const fd = new FormData();
     fd.append("file", audioFile, audioFile.name || "audio.webm");
     fd.append("model", "whisper-1");
@@ -95,16 +77,10 @@ serve(async (req) => {
       body: fd
     });
     const sttJson = await sttRes.json();
-    console.log("📡 Resposta Whisper:", { status: sttRes.status, ok: sttRes.ok });
-    if (!sttRes.ok) {
-      console.error("❌ Erro no Whisper:", sttJson);
-      throw new Error(sttJson?.error?.message || "Falha no Whisper");
-    }
+    if (!sttRes.ok) throw new Error(sttJson?.error?.message || "Falha no Whisper");
     const transcript: string = sttJson.text || "";
-    console.log("✅ Transcrição:", { length: transcript.length, preview: transcript.substring(0, 100) });
 
     // 2) Resposta (GPT)
-    console.log("💬 Enviando para GPT-4...");
     const chatRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -112,8 +88,7 @@ serve(async (req) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4",
-        max_tokens: 500,
+        model: "gpt-5-mini-2025-08-07",
         temperature: 0.6,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
@@ -122,16 +97,10 @@ serve(async (req) => {
       })
     });
     const chatJson = await chatRes.json();
-    console.log("🤖 Resposta GPT:", { status: chatRes.status, ok: chatRes.ok });
-    if (!chatRes.ok) {
-      console.error("❌ Erro no GPT:", chatJson);
-      throw new Error(chatJson?.error?.message || "Falha no Chat");
-    }
+    if (!chatRes.ok) throw new Error(chatJson?.error?.message || "Falha no Chat");
     const assistantText: string = chatJson.choices?.[0]?.message?.content?.trim() || "Obrigado! Poderia repetir?";
-    console.log("✅ Resposta gerada:", { length: assistantText.length, preview: assistantText.substring(0, 100) });
 
     // 3) TTS (OpenAI)
-    console.log("🔊 Enviando para TTS...");
     const ttsRes = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {
@@ -145,17 +114,13 @@ serve(async (req) => {
         response_format: "mp3"
       })
     });
-    console.log("🎵 Resposta TTS:", { status: ttsRes.status, ok: ttsRes.ok });
     if (!ttsRes.ok) {
       const errTxt = await ttsRes.text();
-      console.error("❌ Erro no TTS:", errTxt);
       throw new Error(`Falha no TTS: ${errTxt}`);
     }
     const audioBuf = new Uint8Array(await ttsRes.arrayBuffer());
     const audioBase64 = btoa(String.fromCharCode(...audioBuf));
-    console.log("✅ Áudio gerado:", { size: audioBuf.length, base64Length: audioBase64.length });
 
-    console.log("🎯 Processamento completo com sucesso");
     return new Response(JSON.stringify({ 
       ok: true, 
       transcript, 
@@ -163,7 +128,7 @@ serve(async (req) => {
       audioBase64 
     }), { status: 200, headers: corsHeaders });
   } catch (e) {
-    console.error("💥 Erro geral:", e);
+    console.error(e);
     const corsHeaders = getCorsHeaders(req.headers.get("origin"));
     return new Response(JSON.stringify({ error: e?.message || "Erro interno" }), { status: 500, headers: corsHeaders });
   }
