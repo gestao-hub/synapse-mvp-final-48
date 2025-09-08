@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 type StartOpts = { 
   track: "rh" | "comercial" | "educacional" | "gestao"; 
@@ -18,6 +19,9 @@ export function useRealtimeCall() {
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [userTranscript, setUserTranscript] = useState("");
   const [aiTranscript, setAiTranscript] = useState("");
+  const [sttError, setSttError] = useState<string | null>(null);
+  const [isManualInput, setIsManualInput] = useState(false);
+  const { toast } = useToast?.() || { toast: () => {} };
 
   useEffect(() => {
     // cria <audio> invisível para tocar o lado remoto
@@ -36,11 +40,22 @@ export function useRealtimeCall() {
 
   // Função para salvar transcrições em tempo real
   const saveTranscript = async (text: string, speaker: 'user' | 'ai') => {
-    if (!currentSessionId || !text?.trim()) return;
+    if (!currentSessionId || !text?.trim()) {
+      if (!text?.trim()) {
+        toast({
+          title: "Transcrição vazia não enviada",
+          description: "A transcrição não pode ser vazia. Tente novamente ou digite manualmente.",
+          variant: "destructive"
+        });
+        console.warn("Tentativa de salvar transcrição vazia bloqueada.");
+      }
+      return;
+    }
     // Evitar duplicação - verificar se já foi salvo
     const lastSaved = speaker === 'user' ? lastSavedUserText.current : lastSavedAiText.current;
     if (lastSaved === text) {
       console.log(`⏭️ Transcript ${speaker} já foi salvo, ignorando duplicação`);
+      return;
     }
     try {
       console.log(`📝 Salvando transcript ${speaker}:`, text.substring(0, 50) + '...');
@@ -54,7 +69,14 @@ export function useRealtimeCall() {
         }
       });
       if (response.error) {
+        toast?.({
+          title: "Erro ao salvar transcrição",
+          description: "Não foi possível salvar a transcrição. Tente novamente.",
+          variant: "destructive"
+        });
         console.error(`❌ Erro na função save-live-transcript:`, response.error);
+        setSttError("Erro ao salvar transcrição. Você pode digitar manualmente.");
+        setIsManualInput(true);
         return;
       }
       // Atualizar referência para evitar duplicação
@@ -65,10 +87,47 @@ export function useRealtimeCall() {
         lastSavedAiText.current = text;
         setAiTranscript(prev => prev + (prev ? '\n' : '') + text);
       }
+      setSttError(null);
+      setIsManualInput(false);
       console.log(`✅ Transcript ${speaker} salvo:`, text.substring(0, 50), `turno ${currentTurn}`);
     } catch (error) {
+      toast?.({
+        title: "Erro ao salvar transcrição",
+        description: "Falha inesperada ao salvar transcrição. Você pode digitar manualmente.",
+        variant: "destructive"
+      });
+      setSttError("Erro inesperado ao salvar transcrição.");
+      setIsManualInput(true);
       console.error(`❌ Erro ao salvar transcript ${speaker}:`, error);
     }
+  };
+
+  // Função para fallback: permitir digitação manual
+  const handleManualTranscript = async (text: string) => {
+    if (!text?.trim()) {
+      toast?.({
+        title: "Transcrição manual vazia",
+        description: "Digite algo para enviar a transcrição.",
+        variant: "destructive"
+      });
+      return;
+    }
+    await saveTranscript(text, 'user');
+  };
+
+  // Exemplo de função para processar resultado do STT (Speech-to-Text)
+  const processSttResult = async (result: string) => {
+    if (!result?.trim()) {
+      toast?.({
+        title: "Falha na transcrição",
+        description: "Não foi possível transcrever sua fala. Digite manualmente se necessário.",
+        variant: "destructive"
+      });
+      setSttError("Falha na transcrição. Digite manualmente.");
+      setIsManualInput(true);
+      return;
+    }
+    await saveTranscript(result, 'user');
   };
 
   // Adicionamos uma referência ao tempo de início
@@ -375,16 +434,24 @@ export function useRealtimeCall() {
     turnCounter.current = 0;
   }
 
-  return { 
+  return {
+    status,
+    muted,
+    currentSessionId,
+    userTranscript,
+    aiTranscript,
+    sttError,
+    isManualInput,
+    saveTranscript,
+    processSttResult,
+    handleManualTranscript,
+    setCurrentSessionId,
+    setMuted,
+    setStatus,
     startCall, 
     endCall, 
     toggleMute, 
-    muted, 
-    status,
     remoteAudioElement: remoteAudioRef.current,
-    localStream: localStreamRef.current,
-    currentSessionId,
-    userTranscript,
-    aiTranscript
+    localStream: localStreamRef.current
   };
 }

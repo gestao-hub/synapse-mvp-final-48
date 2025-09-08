@@ -21,12 +21,13 @@ interface SimulationEngineProps {
 }
 
 export function SimulationEngine({ scenario, userRole, onComplete }: SimulationEngineProps) {
+  const handleSimulationEnd = (data: any) => {
+    onComplete(data);
+  };
+
   return (
     <RealSimulationEngine
-      scenario={scenario}
-      userRole={userRole}
-      onComplete={onComplete}
-      onExit={() => window.history.back()}
+      onSimulationEnd={handleSimulationEnd}
     />
   )
 }
