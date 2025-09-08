@@ -111,8 +111,8 @@ export function useRealtimeCall() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvYm9vbmJkZXNzdWlpdmNwZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTA0NDAsImV4cCI6MjA3MTc4NjQ0MH0.lbkilZMpg[...]"
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvYm9vbmJkZXNzdWlpdmNwZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTA0NDAsImV4cCI6MjA3MTc4NjQ[...]"
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvYm9vbmJkZXNzdWlpdmNwZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTA0NDAsImV4cCI6MjA3MTc4NjQ0MH0.lbkilZMpgno7M3NVBhE3P0MoKJEXZIIuLLPCwkN120k",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvYm9vbmJkZXNzdWlpdmNwZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTA0NDAsImV4cCI6MjA3MTc4NjQ0MH0.lbkilZMpgno7M3NVBhE3P0MoKJEXZIIuLLPCwkN120k"
         },
         body: JSON.stringify({
           track,
